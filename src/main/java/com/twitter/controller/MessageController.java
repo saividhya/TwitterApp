@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class MessageController {
 	@Autowired
 	 UserService userService;
 	 
-	@RequestMapping("/messages")
+	@RequestMapping(method=RequestMethod.GET, value="/messages")
 	public ResponseEntity<?> getMessages(@RequestParam(value = "search", required = false) String searchQuery) throws UserNotFoundException{	
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String handle = authentication.getName();

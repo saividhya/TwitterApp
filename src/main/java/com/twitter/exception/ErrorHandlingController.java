@@ -17,6 +17,22 @@ public class ErrorHandlingController {
         return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
     }
 	
+	@ExceptionHandler(FollowException.class)
+    public ResponseEntity<ErrorResponse> followError(Exception ex) {
+		ErrorResponse response = new ErrorResponse();
+        response.setErrorMessage(ex.getMessage());
+        response.setErrorStatus(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
+    }
+	
+	@ExceptionHandler(UnFollowException.class)
+    public ResponseEntity<ErrorResponse> unFollowError(Exception ex) {
+		ErrorResponse response = new ErrorResponse();
+        response.setErrorMessage(ex.getMessage());
+        response.setErrorStatus(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
+    }
+	
 	@ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> badCredentials(Exception ex) {
 		ErrorResponse response = new ErrorResponse();
