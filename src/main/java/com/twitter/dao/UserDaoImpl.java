@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import com.twitter.dto.PopularUsersDto;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
 import com.twitter.exception.UnFollowException;
@@ -53,15 +54,29 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	@Override
-	public List<User> getFollowers(User u) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getFollowers(User user) throws FollowException {
+		List<User> users = null;
+		String sql = "select p.id, handle, name  from followers f,people p  where person_id = :id and p.id = follower_person_id ";
+		SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId());
+		try{
+		 users = namedParameterJdbcTemplate.query(sql, namedParameter, new UserMapper());
+		}catch(EmptyResultDataAccessException e){
+			throw new FollowException("There are no followers for this user");
+		}
+		return users;
 	}
 
 	@Override
-	public List<User> getFollowing(User u) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getFollowing(User user) throws FollowException {
+		List<User> users = null;
+		String sql = "select p.id, handle, name  from followers f,people p  where follower_person_id = :id and p.id = person_id ";
+		SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId());
+		try{
+		 users = namedParameterJdbcTemplate.query(sql, namedParameter, new UserMapper());
+		}catch(EmptyResultDataAccessException e){
+			throw new FollowException("The user does not follow anyone");
+		}
+		return users;
 	}
 
 	@Override
@@ -136,6 +151,31 @@ public class UserDaoImpl implements UserDao{
 		return user;
 	}
 	
+	@Override
+	public List<PopularUsersDto> getPopularUsers() throws UserNotFoundException {
+		String sql = "select c.person_id userid,p.handle userhandle,p.name username,"
+				+ " d.follower_person_id popularuserid,f.handle popularuserhandle,f.name popularusername,c.count followerscount "
+				+ " from (select a.person_id  ,max(followerscount) count from followers a, "
+				+ " (select  person_id, count(1) followerscount from followers group by person_id ) b "
+				+ " where a.follower_person_id = b.person_id group by a.person_id)  c, "
+				+ " (select a.person_id,a.follower_person_id,followerscount  from followers a, "
+				+ " (select  person_id, count(1) followerscount from followers group by person_id ) b "
+				+ " where a.follower_person_id = b.person_id group by a.person_id,a.follower_person_id order by a.person_id,a.follower_person_id) d, "
+				+ " people p,people f where c.person_id = d.person_id and c.count = d.followerscount "
+				+ " and p.id = c.person_id and f.id = d.follower_person_id";
+		SqlParameterSource namedParameter = new MapSqlParameterSource( );
+		List<PopularUsersDto> popualarUsers = null;
+		try{
+			popualarUsers =  namedParameterJdbcTemplate.query(sql, namedParameter, new PopularUserMapper());
+		}catch(EmptyResultDataAccessException e){
+			throw new UserNotFoundException("No users in the system");
+		}
+		if(popualarUsers==null)
+			throw new UserNotFoundException("No users in the system");
+		return popualarUsers;
+		 
+	}
+	
 	private static final class UserMapper implements RowMapper<User>{
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User user = new User();
@@ -145,5 +185,29 @@ public class UserDaoImpl implements UserDao{
 			return user;
 		}
 	}
+	
+	private static final class PopularUserMapper implements RowMapper<PopularUsersDto>{
+		public PopularUsersDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+			PopularUsersDto popularUsers = new PopularUsersDto();
+			
+			User user = new User();
+			user.setId(rs.getInt("userid"));
+			user.setHandle(rs.getString("userhandle"));
+			user.setName(rs.getString("username"));
+			
+			User popularUser = new User();
+			popularUser.setId(rs.getInt("popularuserid"));
+			popularUser.setHandle(rs.getString("popularuserhandle"));
+			popularUser.setName(rs.getString("popularusername"));
+			
+			popularUsers.setUser(user);
+			popularUsers.setPopularUser(popularUser);
+			popularUsers.setFollowersCount(rs.getInt("followerscount"));
+
+			return popularUsers;
+		}
+	}
+
+	
 
 }

@@ -13,7 +13,7 @@ public class ErrorHandlingController {
     public ResponseEntity<ErrorResponse> userNotFound(Exception ex) {
 		ErrorResponse response = new ErrorResponse();
         response.setErrorMessage(ex.getMessage());
-        response.setErrorStatus(HttpStatus.BAD_REQUEST);
+        response.setErrorStatus(HttpStatus.NOT_FOUND);
         return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
     }
 	
@@ -37,7 +37,7 @@ public class ErrorHandlingController {
     public ResponseEntity<ErrorResponse> badCredentials(Exception ex) {
 		ErrorResponse response = new ErrorResponse();
         response.setErrorMessage(ex.getMessage());
-        response.setErrorStatus(HttpStatus.BAD_REQUEST);
+        response.setErrorStatus(HttpStatus.FORBIDDEN);
         return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
     }
 	
