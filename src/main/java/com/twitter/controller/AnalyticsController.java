@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.twitter.dto.FriendsDto;
-import com.twitter.dto.PopularUsersDto;
+import com.twitter.dto.FriendsDTO;
+import com.twitter.dto.HopsDTO;
+import com.twitter.dto.PopularUsersDTO;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
 import com.twitter.exception.UserNotFoundException;
@@ -34,14 +36,23 @@ public class AnalyticsController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String handle = authentication.getName();
 		User user = userService.getUserByHandle(handle);
-		FriendsDto friendsDto = analyticsService.getFriends(user);
-        return new ResponseEntity<FriendsDto>(friendsDto,HttpStatus.OK); 
+		FriendsDTO friendsDto = analyticsService.getFriends(user);
+        return new ResponseEntity<FriendsDTO>(friendsDto,HttpStatus.OK); 
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/popularUsers")
 	public ResponseEntity<?> getPopularUsers() throws FollowException, UserNotFoundException{	
-		List<PopularUsersDto> popularUsersDto = analyticsService.getPopularUsers();
-        return new ResponseEntity<List<PopularUsersDto>>(popularUsersDto,HttpStatus.OK); 
+		List<PopularUsersDTO> popularUsersDto = analyticsService.getPopularUsers();
+        return new ResponseEntity<List<PopularUsersDTO>>(popularUsersDto,HttpStatus.OK); 
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value = "/hops/{id}")
+	public ResponseEntity<?> getMinHops(@PathVariable String id) throws FollowException, UserNotFoundException{	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String handle = authentication.getName();
+		User user = userService.getUserByHandle(handle);
+		HopsDTO hopsDto = analyticsService.getHops(user,id);
+        return new ResponseEntity<HopsDTO>(hopsDto,HttpStatus.OK); 
 	}
 	
 }

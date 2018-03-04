@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.twitter.dto.MessagesDto;
+import com.twitter.dto.MessagesDTO;
 import com.twitter.entity.User;
 import com.twitter.exception.UserNotFoundException;
 import com.twitter.service.MessageService;
@@ -31,7 +31,7 @@ public class MessageController {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String handle = authentication.getName();
 			User user = userService.getUserByHandle(handle);
-			MessagesDto messagesDto = messageService.getMessages(user,searchQuery);
-	        return new ResponseEntity<MessagesDto>(messagesDto,HttpStatus.OK); 
+			MessagesDTO messagesDto = messageService.getMessages(user,searchQuery);
+	        return new ResponseEntity<MessagesDTO>(messagesDto,HttpStatus.OK); 
     } 
 }

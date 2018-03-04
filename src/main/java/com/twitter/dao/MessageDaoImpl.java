@@ -23,32 +23,32 @@ public class MessageDaoImpl implements MessageDao{
 
 	@Override
 	public List<Message> getMyFeeds(User u) throws UserNotFoundException {
-		String sql = "select m.id,person_id,handle,name,content from messages m,"
+		final String SQL = "select m.id,person_id,handle,name,content from messages m,"
 				   + " people p where p.id = m.person_id and m.person_id = :id";
 		if(u==null || u.getId()==0){
 			throw new UserNotFoundException("User not found");
 		}
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", u.getId());
-		List<Message> messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+		List<Message> messages = namedParameterJdbcTemplate.query(SQL, namedParameter, new MessageMapper());
 		return messages;	
 	}
 	
 	@Override
 	public List<Message> getFollowingFeeds(User u) throws UserNotFoundException{
-		String sql = "select m.id,person_id,handle,name,content from messages m,people p "
+		final String SQL = "select m.id,person_id,handle,name,content from messages m,people p "
 				   + " where m.person_id in (select person_id from followers where follower_person_id = :id) "
 				   + " and m.person_id = p.id;";
 		if(u==null || u.getId()==0){
 			throw new UserNotFoundException("User not found");
 		}
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", u.getId());
-		List<Message> messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+		List<Message> messages = namedParameterJdbcTemplate.query(SQL, namedParameter, new MessageMapper());
 		return messages;
 	}
 
 	@Override
 	public List<Message> getMyFeeds(User user, String search) throws UserNotFoundException {
-		String sql = "select m.id,person_id,handle,name,content  from messages m,people p "
+		final String SQL = "select m.id,person_id,handle,name,content  from messages m,people p "
 				    + " where p.id = m.person_id and m.person_id = :id and content like :search ";
 		if(user==null || user.getId()==0){
 			throw new UserNotFoundException("User not found");
@@ -58,7 +58,7 @@ public class MessageDaoImpl implements MessageDao{
 		if(search != null){
 			searchString = "%" + search + "%";
 			SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId()).addValue("search", searchString);
-			messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+			messages = namedParameterJdbcTemplate.query(SQL, namedParameter, new MessageMapper());
 		}else{
 			messages = getMyFeeds(user);
 		}
@@ -68,7 +68,7 @@ public class MessageDaoImpl implements MessageDao{
 
 	@Override
 	public List<Message> getFollowingFeeds(User user, String search) throws UserNotFoundException {
-		String sql = "select m.id,person_id,handle,name,content from messages m,people p "
+		final String SQL = "select m.id,person_id,handle,name,content from messages m,people p "
 					+ " where m.person_id in (select person_id from followers where follower_person_id = :id) "
 					+ " and m.person_id = p.id and content like :search";
 		if(user==null || user.getId()==0){
@@ -79,7 +79,7 @@ public class MessageDaoImpl implements MessageDao{
 		if(search != null){
 			searchString = "%" + search + "%";
 			SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId()).addValue("search", searchString);
-			messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+			messages = namedParameterJdbcTemplate.query(SQL, namedParameter, new MessageMapper());
 		}else{
 			messages = getFollowingFeeds(user);
 		}

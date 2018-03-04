@@ -2,7 +2,7 @@ package com.twitter.dto;
 
 import com.twitter.entity.User;
 
-public class PopularUsersDto {
+public class PopularUsersDTO {
 	User user;
 	User popularUser;
 	int followersCount;

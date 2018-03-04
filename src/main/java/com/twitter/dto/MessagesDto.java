@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.twitter.entity.Message;
 
-public class MessagesDto {
+public class MessagesDTO {
 	List<Message> myFeeds;
 	List<Message> followingFeeds;
 	public List<Message> getMyFeeds() {

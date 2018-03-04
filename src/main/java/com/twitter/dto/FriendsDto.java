@@ -5,7 +5,7 @@ import java.util.List;
 import com.twitter.entity.User;
 
 
-public class FriendsDto {
+public class FriendsDTO {
 	List<User> followers;
 	List<User> following;
 	public List<User> getFollowers() {

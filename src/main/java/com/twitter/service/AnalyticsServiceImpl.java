@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.twitter.dao.UserDao;
 import com.twitter.dto.DTOUtility;
-import com.twitter.dto.FriendsDto;
-import com.twitter.dto.PopularUsersDto;
+import com.twitter.dto.FriendsDTO;
+import com.twitter.dto.HopsDTO;
+import com.twitter.dto.PopularUsersDTO;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
 import com.twitter.exception.UserNotFoundException;
@@ -20,17 +21,31 @@ public class AnalyticsServiceImpl implements AnalyticsService{
 	
 
 	@Override
-	public FriendsDto getFriends(User user) throws FollowException {
+	public FriendsDTO getFriends(User user) throws FollowException {
 		List<User> followers = userDao.getFollowers(user);
 		List<User> following = userDao.getFollowing(user);
-		FriendsDto friendsDto = DTOUtility.convertFriendsDaoToDto(followers, following);
+		FriendsDTO friendsDto = DTOUtility.convertFriendsDaoToDto(followers, following);
 		return friendsDto;
 	}
 
 
 	@Override
-	public List<PopularUsersDto> getPopularUsers() throws FollowException, UserNotFoundException {
+	public List<PopularUsersDTO> getPopularUsers() throws FollowException, UserNotFoundException {
 		return userDao.getPopularUsers();
 	}
 
+
+	@Override
+	public HopsDTO getHops(User currentUser,String id) throws UserNotFoundException, FollowException {
+		User targetUser = userDao.getUserById(id);
+		ServiceUtility su = new ServiceUtility();
+		System.out.println(currentUser.getId());
+		System.out.println(targetUser.getId());
+		int hops = su.getShortestDistance(currentUser,targetUser,userDao);
+		HopsDTO hopsDto = new HopsDTO();
+		hopsDto.setCurrentUser(currentUser);
+		hopsDto.setTargetUser(targetUser);
+		hopsDto.setNoOfHops(hops);
+		return hopsDto;
+	}
 }
