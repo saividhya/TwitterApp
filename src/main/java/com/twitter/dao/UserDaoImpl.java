@@ -83,9 +83,9 @@ public class UserDaoImpl implements UserDao{
 	private static final class UserMapper implements RowMapper<User>{
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User user = new User();
-			user.setId(rs.getInt("ID"));
-			user.setHandle(rs.getString("HANDLE"));
-			user.setName(rs.getString("NAME"));
+			user.setId(rs.getInt("id"));
+			user.setHandle(rs.getString("handle"));
+			user.setName(rs.getString("name"));
 			return user;
 		}
 	}

@@ -47,42 +47,55 @@ public class MessageDaoImpl implements MessageDao{
 	}
 
 	@Override
-	public List<Message> getMyFeeds(User u, String search) throws UserNotFoundException {
+	public List<Message> getMyFeeds(User user, String search) throws UserNotFoundException {
 		String sql = "select m.id,person_id,handle,name,content  from messages m,people p "
 				    + " where p.id = m.person_id and m.person_id = :id and content like :search ";
-		if(u==null || u.getId()==0){
+		if(user==null || user.getId()==0){
 			throw new UserNotFoundException("User not found");
 		}
-		String searchString = "%" + search + "%";
-		SqlParameterSource namedParameter = new MapSqlParameterSource("id", u.getId()).addValue("search", searchString);
-		List<Message> messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+		String searchString = "";
+		List<Message> messages = null;
+		if(search != null){
+			searchString = "%" + search + "%";
+			SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId()).addValue("search", searchString);
+			messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+		}else{
+			messages = getMyFeeds(user);
+		}
+		
 		return messages;	
 	}
 
 	@Override
-	public List<Message> getFollowingFeeds(User u, String search) throws UserNotFoundException {
+	public List<Message> getFollowingFeeds(User user, String search) throws UserNotFoundException {
 		String sql = "select m.id,person_id,handle,name,content from messages m,people p "
 					+ " where m.person_id in (select person_id from followers where follower_person_id = :id) "
 					+ " and m.person_id = p.id and content like :search";
-		if(u==null || u.getId()==0){
+		if(user==null || user.getId()==0){
 			throw new UserNotFoundException("User not found");
 		}
-		String searchString = "%" + search + "%";
-		SqlParameterSource namedParameter = new MapSqlParameterSource("id", u.getId()).addValue("search", searchString);
-		List<Message> messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+		String searchString = "";
+		List<Message> messages = null;
+		if(search != null){
+			searchString = "%" + search + "%";
+			SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId()).addValue("search", searchString);
+			messages = namedParameterJdbcTemplate.query(sql, namedParameter, new MessageMapper());
+		}else{
+			messages = getFollowingFeeds(user);
+		}
 		return messages;
 	}
 	
 	private static final class MessageMapper implements RowMapper<Message>{
 		public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Message message = new Message();
-			message.setId(rs.getInt("ID"));
-			message.setContent(rs.getString("CONTENT"));
+			message.setId(rs.getInt("id"));
+			message.setContent(rs.getString("content"));
 			
 			User user = new User();
-			user.setId(rs.getInt("PERSON_ID"));
-			user.setHandle(rs.getString("HANDLE"));
-			user.setName(rs.getString("NAME"));
+			user.setId(rs.getInt("person_id"));
+			user.setHandle(rs.getString("handle"));
+			user.setName(rs.getString("name"));
 			
 			message.setUser(user);
 			return message;
