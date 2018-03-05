@@ -39,8 +39,6 @@ public class AnalyticsServiceImpl implements AnalyticsService{
 	public HopsDTO getHops(User currentUser,String id) throws UserNotFoundException, FollowException {
 		User targetUser = userDao.getUserById(id);
 		ServiceUtility su = new ServiceUtility();
-		System.out.println(currentUser.getId());
-		System.out.println(targetUser.getId());
 		int hops = su.getShortestDistance(currentUser,targetUser,userDao);
 		HopsDTO hopsDto = new HopsDTO();
 		hopsDto.setCurrentUser(currentUser);

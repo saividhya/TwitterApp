@@ -28,10 +28,9 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public List<User> getUsers() throws UserNotFoundException {
 		List<User> users = null;
-		final String SQL = "select p.id,handle,name from people p ";
 		SqlParameterSource namedParameter = new MapSqlParameterSource();
 		try{
-		 users = namedParameterJdbcTemplate.query(SQL, namedParameter, new UserMapper());
+		 users = namedParameterJdbcTemplate.query(SQLQueries.GETUSERS, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new UserNotFoundException("No users in the system");
 		}
@@ -40,11 +39,10 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User getUserById(String id) throws UserNotFoundException {
-		final String SQL = "select p.id,handle,name from people p where p.id = :id ";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", id);
 		User user = null;
 		try{
-		 user = namedParameterJdbcTemplate.queryForObject(SQL, namedParameter, new UserMapper());
+		 user = namedParameterJdbcTemplate.queryForObject(SQLQueries.GETUSERBYID, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new UserNotFoundException("User not found");
 		}
@@ -56,10 +54,9 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public List<User> getFollowers(User user) throws FollowException {
 		List<User> users = null;
-		final String SQL = "select p.id, handle, name  from followers f,people p  where person_id = :id and p.id = follower_person_id ";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId());
 		try{
-		 users = namedParameterJdbcTemplate.query(SQL, namedParameter, new UserMapper());
+		 users = namedParameterJdbcTemplate.query(SQLQueries.GETFOLLOWERS, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new FollowException("There are no followers for this user");
 		}
@@ -69,10 +66,9 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public List<User> getFollowing(User user) throws FollowException {
 		List<User> users = null;
-		final String SQL = "select p.id, handle, name  from followers f,people p  where follower_person_id = :id and p.id = person_id ";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId());
 		try{
-		 users = namedParameterJdbcTemplate.query(SQL, namedParameter, new UserMapper());
+		 users = namedParameterJdbcTemplate.query(SQLQueries.GETFOLLOWING, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new FollowException("The user does not follow anyone");
 		}
@@ -84,19 +80,17 @@ public class UserDaoImpl implements UserDao{
 		
 		
 		//Check if the current user already follows the target user
-		final String CHECKQUERY = "select count(1) from followers where person_id= :person_id and follower_person_id = :follower_person_id";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("person_id", targetUser.getId()).addValue("follower_person_id", currentUser.getId());
-		Integer count = namedParameterJdbcTemplate.queryForObject(CHECKQUERY, namedParameter, Integer.class);
+		Integer count = namedParameterJdbcTemplate.queryForObject(SQLQueries.CHECKCOUNT, namedParameter, Integer.class);
 		if(count > 0){
 			throw new FollowException(" User "+ currentUser.getHandle() +" is already following the user "+ targetUser.getHandle());
 		}
 		
-		final String SQL = "insert into followers (person_id, follower_person_id) values (:person_id, :follower_person_id)";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("person_id", targetUser.getId());
         paramMap.put("follower_person_id", currentUser.getId());
         try{
-        	namedParameterJdbcTemplate.update(SQL, paramMap);  
+        	namedParameterJdbcTemplate.update(SQLQueries.ADDFOLLOWING, paramMap);  
         }catch(Exception e){
         	throw new FollowException("Cannot follow user " + targetUser.getHandle() );
         }
@@ -106,16 +100,14 @@ public class UserDaoImpl implements UserDao{
 	public void deleteFollowing(User currentUser, User targetUser) throws UnFollowException {
 		
 		//Check if the current user follows the target user
-		final String CHECKQUERY = "select count(1) from followers where person_id= :person_id and follower_person_id = :follower_person_id";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("person_id", targetUser.getId()).addValue("follower_person_id", currentUser.getId());
-		Integer count = namedParameterJdbcTemplate.queryForObject(CHECKQUERY, namedParameter, Integer.class);
+		Integer count = namedParameterJdbcTemplate.queryForObject(SQLQueries.CHECKCOUNT, namedParameter, Integer.class);
 		if(count == 0){
 			throw new UnFollowException(" User "+ currentUser.getHandle() +" does not follow user "+ targetUser.getHandle());
 		}
 		
-		final String SQL = "DELETE FROM followers WHERE person_id= :person_id and follower_person_id = :follower_person_id";
 		try{
-			namedParameterJdbcTemplate.update(SQL, namedParameter);
+			namedParameterJdbcTemplate.update(SQLQueries.DELETEFOLLOWING, namedParameter);
         }catch(Exception e){
         	throw new UnFollowException("Cannot unfollow user " + targetUser.getHandle() );
         }
@@ -123,11 +115,10 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User getUserByName(String name) throws UserNotFoundException{
-		final String SQL = "select p.id,handle,name from people p where p.name = :name ";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("name", name);
 		User user = null;
 		try{
-		 user = namedParameterJdbcTemplate.queryForObject(SQL, namedParameter, new UserMapper());
+		 user = namedParameterJdbcTemplate.queryForObject(SQLQueries.GETUSERBYNAME, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new UserNotFoundException("User not found");
 		}
@@ -138,11 +129,10 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User getUserByHandle(String handle) throws UserNotFoundException{
-		final String SQL = "select p.id,handle,name from people p where p.handle = :handle ";
 		SqlParameterSource namedParameter = new MapSqlParameterSource("handle", handle);
 		User user = null;
 		try{
-		 user = namedParameterJdbcTemplate.queryForObject(SQL, namedParameter, new UserMapper());
+		 user = namedParameterJdbcTemplate.queryForObject(SQLQueries.GETUSERBYHANDLE, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new UserNotFoundException("User not found");
 		}
@@ -153,20 +143,10 @@ public class UserDaoImpl implements UserDao{
 	
 	@Override
 	public List<PopularUsersDTO> getPopularUsers() throws UserNotFoundException {
-		final String SQL = "select c.person_id userid,p.handle userhandle,p.name username,"
-				+ " d.follower_person_id popularuserid,f.handle popularuserhandle,f.name popularusername,c.count followerscount "
-				+ " from (select a.person_id  ,max(followerscount) count from followers a, "
-				+ " (select  person_id, count(1) followerscount from followers group by person_id ) b "
-				+ " where a.follower_person_id = b.person_id group by a.person_id)  c, "
-				+ " (select a.person_id,a.follower_person_id,followerscount  from followers a, "
-				+ " (select  person_id, count(1) followerscount from followers group by person_id ) b "
-				+ " where a.follower_person_id = b.person_id group by a.person_id,a.follower_person_id order by a.person_id,a.follower_person_id) d, "
-				+ " people p,people f where c.person_id = d.person_id and c.count = d.followerscount "
-				+ " and p.id = c.person_id and f.id = d.follower_person_id";
 		SqlParameterSource namedParameter = new MapSqlParameterSource( );
 		List<PopularUsersDTO> popualarUsers = null;
 		try{
-			popualarUsers =  namedParameterJdbcTemplate.query(SQL, namedParameter, new PopularUserMapper());
+			popualarUsers =  namedParameterJdbcTemplate.query(SQLQueries.GETPOPULARUSERS, namedParameter, new PopularUserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new UserNotFoundException("No users in the system");
 		}
@@ -191,18 +171,18 @@ public class UserDaoImpl implements UserDao{
 			PopularUsersDTO popularUsers = new PopularUsersDTO();
 			
 			User user = new User();
-			user.setId(rs.getInt("userid"));
-			user.setHandle(rs.getString("userhandle"));
-			user.setName(rs.getString("username"));
+			user.setId(rs.getInt("user_id"));
+			user.setHandle(rs.getString("user_handle"));
+			user.setName(rs.getString("user_name"));
 			
 			User popularUser = new User();
-			popularUser.setId(rs.getInt("popularuserid"));
-			popularUser.setHandle(rs.getString("popularuserhandle"));
-			popularUser.setName(rs.getString("popularusername"));
+			popularUser.setId(rs.getInt("popular_user_id"));
+			popularUser.setHandle(rs.getString("popular_user_handle"));
+			popularUser.setName(rs.getString("popular_user_name"));
 			
 			popularUsers.setUser(user);
 			popularUsers.setPopularUser(popularUser);
-			popularUsers.setFollowersCount(rs.getInt("followerscount"));
+			popularUsers.setFollowersCount(rs.getInt("followers_count"));
 
 			return popularUsers;
 		}

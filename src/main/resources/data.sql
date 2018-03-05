@@ -10,7 +10,11 @@ VALUES
     (7, 'zod', 'Dru-Zod'),
     (8, 'spiderman', 'Peter Parker'),
     (9, 'ironman', 'Tony Stark'),
-    (10, 'profx', 'Charles Xavier');
+    (10, 'profx', 'Charles Xavier'),
+    (11, 'flash', 'Barry Allen'),
+    (12, 'phoenix', 'Jean Grey'),
+    (13, 'wolverine', 'Logan'),
+    (14, 'deathstroke', 'Slade Wilson');
 
 -- Messages
 INSERT INTO messages (person_id, content)
@@ -24,7 +28,10 @@ VALUES
     (7, 'I exist only to protect Krypton. Every action, no matter how violent or cruel, is for the greater good of my people.'),
     (8, 'With great power comes great responsibility.'),
     (9, 'I shouldn''t be alive, unless it was for a reason. I know what I have to do, and I know it is right.'),
-    (10, 'Just because someone stumbles and loses their path doesn''t mean they can''t be saved.');
+    (10, 'Just because someone stumbles and loses their path doesn''t mean they can''t be saved.'),
+    (11, 'Sometimes great possibilities are right in front of us but we do not see them because we choose not to. I think that we need to be open to exploring something new'),
+    (12, 'I am fire and life incarnate! Now and forever — I am Phoenix!'),
+    (13, 'But if you cage the beast, the beast will get angry!');
 
 INSERT INTO messages (person_id, content)
 VALUES
@@ -37,7 +44,9 @@ VALUES
     (2, 'libero nec ligula consectetuer rhoncus. Nullam velit dui, semper et,'),
     (8, 'posuere at, velit. Cras lorem lorem, luctus ut, pellentesque eget,'),
     (2, 'Donec at arcu. Vestibulum ante ipsum primis in faucibus orci'),
-    (6, 'eu, ultrices sit amet, risus. Donec nibh enim, gravida sit');
+    (6, 'eu, ultrices sit amet, risus. Donec nibh enim, gravida sit'),
+    (11, 'Today I do not want to think, I just want to run.'),
+    (12, 'Finish me with your claws. I beg you. I do not want to HURT YOU!!');
 
 INSERT INTO messages (person_id, content)
 VALUES
@@ -50,7 +59,8 @@ VALUES
     (4, 'ut ipsum ac mi eleifend egestas. Sed pharetra, felis eget'),
     (3, 'odio. Aliquam vulputate ullamcorper magna. Sed eu eros. Nam consequat'),
     (8, 'pretium et, rutrum non, hendrerit id, ante. Nunc mauris sapien,'),
-    (2, 'in aliquet lobortis, nisi nibh lacinia orci, consectetuer euismod est');
+    (2, 'in aliquet lobortis, nisi nibh lacinia orci, consectetuer euismod est'),
+    (13, 'Do I look like a man who exaggerates?');
 
 INSERT INTO messages (person_id, content)
 VALUES
@@ -76,7 +86,8 @@ VALUES
     (7, 'risus. Duis a mi fringilla mi lacinia mattis. Integer eu'),
     (7, 'quam quis diam. Pellentesque habitant morbi tristique senectus et netus'),
     (4, 'Morbi non sapien molestie orci tincidunt adipiscing. Mauris molestie pharetra'),
-    (5, 'Sed et libero. Proin mi. Aliquam gravida mauris ut mi.');
+    (5, 'Sed et libero. Proin mi. Aliquam gravida mauris ut mi.'),
+    (13, 'That looks like the creature that ate Fred Dukes!');
 
 INSERT INTO messages (person_id, content)
 VALUES
@@ -226,4 +237,7 @@ VALUES
     (7, 10),
     (5, 7),
     (2, 1),
-    (10, 9);
+    (10, 9),
+    (12,13),
+    (1,11),
+    (11,12);
