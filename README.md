@@ -1,5 +1,5 @@
 # TwitterApp
-TwitterApp is a coding challenge to develop RestFul APIs for twitter using Spring Boot, H2 In-memory SQL database and Spring Basic authenitcation.
+TwitterApp - RestFul APIs for twitter to view feeds, followers, follow / unfollow users using Spring Boot, H2 In-memory SQL database and Spring Basic authenitcation.
 
 All the below APIs are authenticated using Spring Basic Authentication. 
 The handle of the user is used to validate if the user is present in the system or not. 
