@@ -45,7 +45,36 @@ public class ExpectedResultBuilder {
 		result.add(1,m2);
 		return result;
 	}
+	
+	public static List<Message> getFollowingFeedsWithSearch(){
+		User expectedUser = new User();
+		expectedUser.setId(12);
+		expectedUser.setHandle("phoenix");
+		expectedUser.setName("Jean Grey");
+		Message m1 = new Message();
+		m1.setUser(expectedUser);
+		m1.setContent("Finish me with your claws. I beg you. I do not want to HURT YOU!!");
+		List<Message> result = new ArrayList<Message>();
+		result.add(0,m1);
+		return result;
+	}
 
+	public static List<Message> getFollowingFeeds(){
+		User expectedUser = new User();
+		expectedUser.setId(12);
+		expectedUser.setHandle("phoenix");
+		expectedUser.setName("Jean Grey");
+		Message m1 = new Message();
+		m1.setUser(expectedUser);
+		m1.setContent("I am fire and life incarnate! Now and forever — I am Phoenix!");
+		Message m2 = new Message();
+		m2.setUser(expectedUser);
+		m2.setContent("Finish me with your claws. I beg you. I do not want to HURT YOU!!");
+		List<Message> result = new ArrayList<Message>();
+		result.add(0,m1);
+		result.add(1,m2);
+		return result;
+	}
 	public static User getValidUser(){
 		User expectedUser = new User();
 		expectedUser.setId(12);
@@ -367,6 +396,26 @@ public class ExpectedResultBuilder {
 		return result;
 	}
 
+	public static HopsDTO getHopsNoHops(){
+		
+		User user1 = new User();
+		user1.setId(1);
+		user1.setName("Bruce Wayne");
+		user1.setHandle("batman");
+		
+		User user2 = new User();
+		user2.setId(14);
+		user2.setHandle("deathstroke");
+		user2.setName("Slade Wilson");
+		
+		HopsDTO result = new HopsDTO();
+		result.setCurrentUser(user1);
+		result.setTargetUser(user2);
+		result.setNoOfHops(0);
+		
+		return result;
+	}
+	
 	public static HopsDTO getHopsSelf(){
 		
 		User user1 = new User();
@@ -386,6 +435,6 @@ public class ExpectedResultBuilder {
 		
 		return result;
 	}
-
+	
 	
 }

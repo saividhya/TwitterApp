@@ -16,7 +16,8 @@ public interface UserDao {
 	User getUserByHandle(String handle) throws UserNotFoundException;
 	List<User> getFollowers(User u) throws FollowException;
 	List<User> getFollowing(User u) throws FollowException;
-	List<PopularUsersDTO> getPopularUsers()  throws UserNotFoundException ;
+	List<PopularUsersDTO> getPopularUsers()  throws UserNotFoundException;
+	boolean checkFollowing(User currentUser, User targetUser);
 	void addFollowing(User currentUser, User targetUser) throws FollowException;
 	void deleteFollowing(User currentUser, User targetUser) throws UnFollowException;
 	

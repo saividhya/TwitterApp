@@ -14,7 +14,7 @@ public class ErrorHandlingController {
 		ErrorResponse response = new ErrorResponse();
         response.setErrorMessage(ex.getMessage());
         response.setErrorStatus(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ErrorResponse>(response, HttpStatus.NOT_FOUND);
     }
 	
 	@ExceptionHandler(FollowException.class)
@@ -38,7 +38,7 @@ public class ErrorHandlingController {
 		ErrorResponse response = new ErrorResponse();
         response.setErrorMessage(ex.getMessage());
         response.setErrorStatus(HttpStatus.FORBIDDEN);
-        return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ErrorResponse>(response, HttpStatus.FORBIDDEN);
     }
 	
 	@ExceptionHandler(Exception.class)

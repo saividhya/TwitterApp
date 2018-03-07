@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.twitter.ChallengeApplication;
 import com.twitter.dao.UserDao;
@@ -23,25 +24,24 @@ import com.twitter.test.ExpectedResultBuilder;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ChallengeApplication.class)
 @ComponentScan
-
+@WebAppConfiguration
 public class UserDaoTest {
 
 	@Autowired
 	UserDao userDao;
 	
-	//1. Test to get all users in the system
+	//Test to get all users in the system
 	@Test
 	public void testGetUsers(){
 		try {
 			List<User> actualResult = userDao.getUsers();
 			assertEquals(14,actualResult.size());
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		}
 	}
 	
-	//2. Test to get a user with valid id
+	//Test to get a user with valid id
 	@Test
 	public void testGetUserById(){
 		User testUser = ExpectedResultBuilder.getValidUser();
@@ -52,12 +52,11 @@ public class UserDaoTest {
 			assertEquals(testUser.getHandle(),actualResult.getHandle());
 			
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		}
 	}
 		
-	//3. Test for user with invalid id
+	//Test for user with invalid id
 	@Test
 	public void testGetUserByIdInvalid(){
 		try {
@@ -66,7 +65,7 @@ public class UserDaoTest {
 			assertEquals("User not found",e.getMessage());
 		}
 	}
-	//4. Test for user with followers
+	//Test for user with followers
 	@Test
 	public void testGetFollowersValid(){
 		User testUser = new User();
@@ -85,11 +84,11 @@ public class UserDaoTest {
 			}
 			
 		} catch (FollowException e) {
-			 
+			assertEquals(null,e.getMessage());
 		}
 	}
 	
-	//5. Test for user with no followers
+	//Test for user with no followers
 	@Test
 	public void testGetFollowersInvalid(){
 		User testUser = new User();
@@ -103,7 +102,7 @@ public class UserDaoTest {
 		}
 	}
 	
-	//6. Test for user with followers
+	//Test for user who follows other users
 	@Test
 	public void testGetFollowingValid(){
 		User testUser = new User();
@@ -121,11 +120,58 @@ public class UserDaoTest {
 			}
 			
 		} catch (FollowException e) {
-			 
+			assertEquals(null,e.getMessage());
 		}
 	}
 	
-	//7. Test for user with existing relationship
+	//Test for user who doesn't follow other users
+	@Test
+	public void testGetFollowingInValid(){
+		User testUser = new User();
+		testUser.setId(14);
+		testUser.setHandle("deathstroke");
+		testUser.setName("Slade Wilson");
+		try {
+			List<User> actualResult = userDao.getFollowing(testUser);  
+			
+		} catch (FollowException e) {
+			assertEquals("The user does not follow anyone",e.getMessage());
+		}
+	}
+	
+	  //Test for user with existing relationship
+		@Test
+		public void testCheckFollowingValid(){
+			User testUser1 = new User();
+			testUser1.setId(12);
+			testUser1.setHandle("phoenix");
+			testUser1.setName("Jean Grey");
+			
+			User testUser2 = new User();
+			testUser2.setId(13);
+			testUser2.setHandle("wolverine");
+			testUser2.setName("Logan");
+			assertEquals(true,userDao.checkFollowing(testUser2, testUser1)); 
+			
+		}
+		
+		//Test to check for a no existing relationship
+		@Test
+		public void testCheckFollowingInvalid(){
+			User user11 = new User();
+			user11.setId(11);
+			user11.setName("Barry Allen");
+			user11.setHandle("flash");
+			
+			User user1 = new User();
+			user1.setId(1);
+			user1.setName("Bruce Wayne");
+			user1.setHandle("batman");
+			assertEquals(false,userDao.checkFollowing(user1, user11));
+		}
+		
+	
+	//Test for user with existing relationship
 	@Test
 	public void testAddFollowingInvalid(){
 		User testUser1 = new User();
@@ -141,11 +187,53 @@ public class UserDaoTest {
 		try {
 			userDao.addFollowing(testUser2,testUser1); 
 		} catch (FollowException e) { 
-			assertEquals(" User wolverine is already following the user phoenix",e.getMessage());
+			assertEquals("User wolverine is already following the user phoenix",e.getMessage());
 		}
 	}
 	
-	//8. Test for unfollowing a relation which is not present
+	//Test to add new relationship
+	@Test
+	public void testAddFollowingValid(){
+		User user11 = new User();
+		user11.setId(11);
+		user11.setName("Barry Allen");
+		user11.setHandle("flash");
+		
+		User user1 = new User();
+		user1.setId(1);
+		user1.setName("Bruce Wayne");
+		user1.setHandle("batman");
+		
+		try {
+			userDao.addFollowing(user1,user11); 
+			assertEquals(true,userDao.checkFollowing(user1, user11));
+		} catch (FollowException e) { 
+			assertEquals(null,e.getMessage());
+		}
+	}
+	
+	//Test for unfollow for valid relationship
+	@Test
+	public void testDeleteFollowingValid(){
+		User user5 = new User();
+		user5.setId(5);
+		user5.setName("Alfred Pennyworth");
+		user5.setHandle("alfred");
+		
+		User user1 = new User();
+		user1.setId(1);
+		user1.setName("Bruce Wayne");
+		user1.setHandle("batman");
+		
+		try {
+			userDao.deleteFollowing(user1,user5);
+			assertEquals(false,userDao.checkFollowing(user1, user5));
+		} catch (UnFollowException e) {
+			assertEquals(null,e.getMessage());
+		}
+	}
+	
+	//Test for unfollowing a relation which is not present
 	@Test
 	public void testDeleteFollowingInvalid(){
 		User testUser1 = new User();
@@ -161,11 +249,13 @@ public class UserDaoTest {
 		try {
 			userDao.deleteFollowing(testUser1,testUser2); 
 		} catch (UnFollowException e) {
-			assertEquals(" User phoenix does not follow user wolverine",e.getMessage());
+			assertEquals("User phoenix does not follow user wolverine",e.getMessage());
 		}
 	}
 	
-	//9. Test to get a user with valid id
+	
+	
+	//Test to get a user with valid name
 	@Test
 	public void testGetUserByName(){
 		User testUser = ExpectedResultBuilder.getValidUser();
@@ -176,12 +266,21 @@ public class UserDaoTest {
 			assertEquals(testUser.getHandle(),actualResult.getHandle());
 			
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		}
 	}
 
-	//10. Test to get a user with valid id
+	//Test to get a user with invalid name
+	@Test
+	public void testGetUserByNameInvalid(){
+		try {
+			User actualResult = userDao.getUserByName("testinvalid");
+		} catch (UserNotFoundException e) {
+			assertEquals("User not found",e.getMessage());
+		}
+	}
+
+	//Test to get a user with valid handle
 	@Test
 	public void testGetUserByHandle(){
 		User testUser = ExpectedResultBuilder.getValidUser();
@@ -192,12 +291,11 @@ public class UserDaoTest {
 			assertEquals(testUser.getName(),actualResult.getName());
 			assertEquals(testUser.getHandle(),actualResult.getHandle());
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		}
 	}
 
-	//11. Test to get a user with invalid handle
+	//Test to get a user with invalid handle
 	@Test
 	public void testGetUserByHandleInvalid(){
 		try {
@@ -207,17 +305,7 @@ public class UserDaoTest {
 		}
 	}
 
-	//12. Test to get a user with invalid handle
-	@Test
-	public void testGetUserByNameInvalid(){
-		try {
-			User actualResult = userDao.getUserByName("testinvalid");
-		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
-		}
-	}
-
-	//13. Test to get a user with invalid handle
+	// Test to get a user with invalid handle
 	@Test
 	public void testGetPopularUsers(){
 		try {
@@ -232,7 +320,7 @@ public class UserDaoTest {
 			}
 			
 		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
+			assertEquals(null,e.getMessage());
 		}
 	}
 	

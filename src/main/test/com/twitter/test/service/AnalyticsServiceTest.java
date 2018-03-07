@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.twitter.ChallengeApplication;
 import com.twitter.dto.FriendsDTO;
@@ -21,7 +22,7 @@ import com.twitter.test.ExpectedResultBuilder;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ChallengeApplication.class)
 @ComponentScan
-
+@WebAppConfiguration
 public class AnalyticsServiceTest {
 	@Autowired
 	AnalyticsService analyticsService;
@@ -44,7 +45,22 @@ public class AnalyticsServiceTest {
 			}
 			
 		} catch (FollowException e) { 
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
+		}
+	}
+
+	@Test
+	public void testGetFriendsInvalid(){
+		User testUser = new User();
+		testUser.setId(14);
+		testUser.setHandle("deathstroke");
+		testUser.setName("Slade Wilson");
+		try {
+			FriendsDTO actualResult = analyticsService.getFriends(testUser);
+			assertEquals(0,actualResult.getFollowers().size());
+			assertEquals(0,actualResult.getFollowing().size());
+		} catch (FollowException e) { 
+			assertEquals(null,e.getMessage());
 		}
 	}
 
@@ -71,11 +87,9 @@ public class AnalyticsServiceTest {
 			assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
 			
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		} catch (FollowException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		}
 		
 	}
@@ -103,11 +117,39 @@ public class AnalyticsServiceTest {
 			assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
 			
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
 		} catch (FollowException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			assertEquals(null,e.getMessage());
+		}
+		
+	}
+
+	@Test
+	public void testGetHopsNoHops(){
+		User testUser = new User();
+		testUser.setId(1);
+		testUser.setHandle("batman");
+		testUser.setName("Bruce Wayne");
+		
+		HopsDTO actualResult;
+		try {
+			actualResult = analyticsService.getHops(testUser, "14");
+			HopsDTO expectedResult = ExpectedResultBuilder.getHopsNoHops();
+			
+			assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
+			assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
+			assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
+			
+			assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
+			assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
+			assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
+			
+			assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
+			
+		} catch (UserNotFoundException e) {
+			assertEquals(null,e.getMessage());
+		} catch (FollowException e) {
+			assertEquals(null,e.getMessage());
 		}
 		
 	}

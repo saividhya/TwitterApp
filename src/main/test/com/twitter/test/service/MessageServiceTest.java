@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.twitter.ChallengeApplication;
 import com.twitter.dto.MessagesDTO;
@@ -22,7 +23,7 @@ import com.twitter.test.ExpectedResultBuilder;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ChallengeApplication.class)
 @ComponentScan
-
+@WebAppConfiguration
 public class MessageServiceTest {
 
 	@Autowired
@@ -55,7 +56,7 @@ public class MessageServiceTest {
 			}
 			
 		} catch (UserNotFoundException e) {
-			System.out.println("test failed");
+			assertEquals(null,e.getMessage());
 		}
 		
 	}
@@ -88,7 +89,7 @@ public class MessageServiceTest {
 			}
 			
 		} catch (UserNotFoundException e) {
-			System.out.println("test failed");
+			assertEquals(null,e.getMessage());
 		}
 		
 	}
@@ -121,7 +122,7 @@ public class MessageServiceTest {
 			}
 			
 		} catch (UserNotFoundException e) {
-			System.out.println("test failed");
+			assertEquals(null,e.getMessage());
 		}
 		
 	}
