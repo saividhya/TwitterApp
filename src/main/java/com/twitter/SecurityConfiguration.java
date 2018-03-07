@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-    private TwitterAuthenticationProvider authProvider;
+    private ChallengeAuthenticationProvider authProvider;
 	
 	@Override
     protected void configure(

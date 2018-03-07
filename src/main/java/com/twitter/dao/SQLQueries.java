@@ -35,6 +35,8 @@ public class SQLQueries {
 	
 	public static final String USER_BY_HANDLE = "select p.id,handle,name from people p where p.handle = :handle ";
 	
+	public static final String USER_BY_USERNAME = "select p.id,handle,name from people p where p.username = :name ";
+	
 	public static final String POPULAR_USERS = "select c.person_id user_id,p.handle user_handle,p.name user_name,"
 												+ " d.follower_person_id popular_user_id,f.handle popular_user_handle,f.name popular_user_name,c.count followers_count "
 												+ " from (select a.person_id  ,max(followerscount) count from followers a, "

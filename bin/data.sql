@@ -1,20 +1,20 @@
 -- People
-INSERT INTO people (id, handle, name)
+INSERT INTO people (id, handle, name, username, password)
 VALUES
-    (1, 'batman', 'Bruce Wayne'),
-    (2, 'superman', 'Clark Kent'),
-    (3, 'catwoman', 'Selina Kyle'),
-    (4, 'daredevil', 'Matt Murdock'),
-    (5, 'alfred', 'Alfred Pennyworth'),
-    (6, 'dococ', 'Otto Octavius'),
-    (7, 'zod', 'Dru-Zod'),
-    (8, 'spiderman', 'Peter Parker'),
-    (9, 'ironman', 'Tony Stark'),
-    (10, 'profx', 'Charles Xavier'),
-    (11, 'flash', 'Barry Allen'),
-    (12, 'phoenix', 'Jean Grey'),
-    (13, 'wolverine', 'Logan'),
-    (14, 'deathstroke', 'Slade Wilson');
+    (1, 'batman', 'Bruce Wayne', 'batman', '123456'),
+    (2, 'superman', 'Clark Kent', 'superman', '123456'),
+    (3, 'catwoman', 'Selina Kyle','catwoman', '123456'),
+    (4, 'daredevil', 'Matt Murdock','daredevil', '123456'),
+    (5, 'alfred', 'Alfred Pennyworth','alfred', '123456'),
+    (6, 'dococ', 'Otto Octavius','dococ', '123456'),
+    (7, 'zod', 'Dru-Zod','zod', '123456'),
+    (8, 'spiderman', 'Peter Parker', 'spiderman','123456'),
+    (9, 'ironman', 'Tony Stark','ironman', '123456'),
+    (10, 'profx', 'Charles Xavier','profx',  '123456'),
+    (11, 'flash', 'Barry Allen', 'flash','123456'),
+    (12, 'phoenix', 'Jean Grey','phoenix', '123456'),
+    (13, 'wolverine', 'Logan','wolverine', '123456'),
+    (14, 'deathstroke', 'Slade Wilson','deathstroke', '123456');
 
 -- Messages
 INSERT INTO messages (person_id, content)

@@ -29,8 +29,8 @@ public class MessageController {
 	@RequestMapping(method=RequestMethod.GET, value="/messages")
 	public ResponseEntity<?> getMessages(@RequestParam(value = "search", required = false) String searchQuery) throws UserNotFoundException{	
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String handle = authentication.getName();
-			User user = userService.getUserByHandle(handle);
+			String name = authentication.getName();
+			User user = userService.getUserByUsername(name);
 			MessagesDTO messagesDto = messageService.getMessages(user,searchQuery);
 	        return new ResponseEntity<MessagesDTO>(messagesDto,HttpStatus.OK); 
     } 

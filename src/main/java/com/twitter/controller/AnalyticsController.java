@@ -34,8 +34,8 @@ public class AnalyticsController {
 	@RequestMapping(method=RequestMethod.GET, value = "/friends")
 	public ResponseEntity<?> getFriends() throws FollowException, UserNotFoundException{	
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String handle = authentication.getName();
-		User user = userService.getUserByHandle(handle);
+		String name = authentication.getName();
+		User user = userService.getUserByUsername(name);
 		FriendsDTO friendsDto = analyticsService.getFriends(user);
         return new ResponseEntity<FriendsDTO>(friendsDto,HttpStatus.OK); 
 	}
@@ -49,8 +49,8 @@ public class AnalyticsController {
 	@RequestMapping(method=RequestMethod.GET, value = "/hops/{id}")
 	public ResponseEntity<?> getMinHops(@PathVariable String id) throws FollowException, UserNotFoundException{	
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String handle = authentication.getName();
-		User user = userService.getUserByHandle(handle);
+		String name = authentication.getName();
+		User user = userService.getUserByUsername(name);
 		HopsDTO hopsDto = analyticsService.getHops(user,id);
         return new ResponseEntity<HopsDTO>(hopsDto,HttpStatus.OK); 
 	}

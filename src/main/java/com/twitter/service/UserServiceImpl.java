@@ -35,7 +35,40 @@ public class UserServiceImpl implements UserService{
 	public User getUserByName(String name) throws UserNotFoundException {
 		return userDao.getUserByName(name);
 	}
-
+	
+	@Override
+	public User getUserByUsername(String name) throws UserNotFoundException {
+		return userDao.getUserByUsername(name);
+	}
+	
+	@Override
+	public User getUser(String id) throws UserNotFoundException {
+		 User user =null;
+		 try{
+			 int userId = Integer.parseInt(id);
+			 user = userDao.getUserById(id);
+		 }catch(Exception e){
+			 
+		 }
+		 if(user==null){
+			try{
+				 user = userDao.getUserByName(id);
+			}catch(Exception e){
+				 
+			 }
+		 }
+		 if(user==null){
+			try{
+				 user = userDao.getUserByHandle(id);
+			}catch(Exception e){
+				 
+			 }
+		 }
+		 if(user==null)
+			throw new UserNotFoundException("User not found");
+		return user;
+	}
+	
 	@Override
 	public void addFollowing(User user,String following_id) throws UserNotFoundException, FollowException {
 		User followingUser = getUserById(following_id);

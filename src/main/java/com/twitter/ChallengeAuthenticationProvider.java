@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import com.twitter.entity.User;
 
 @Component
-public class TwitterAuthenticationProvider implements AuthenticationProvider{
+public class ChallengeAuthenticationProvider implements AuthenticationProvider{
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
@@ -33,18 +33,18 @@ public class TwitterAuthenticationProvider implements AuthenticationProvider{
         if (user!=null) {
             return new UsernamePasswordAuthenticationToken(name, password, new ArrayList<>());
         } else {
-        	throw new BadCredentialsException("Username incorrect");
+        	throw new BadCredentialsException("Invalid credentials");
         }
 	}
 
 	private User authenticateUser(String name, String password) throws AuthenticationException {
-		String sql = "select p.id,handle,name from people p where p.handle = :name";
-        SqlParameterSource namedParameter = new MapSqlParameterSource("name", name);
+		String sql = "select p.id,handle,name from people p where p.username = :name  and p.password = :password"; 
+        SqlParameterSource namedParameter = new MapSqlParameterSource("name", name).addValue("password", password);
         User user = null;
         try{
            user = namedParameterJdbcTemplate.queryForObject(sql, namedParameter, new UserMapper());
         }catch(EmptyResultDataAccessException e){
-        	throw new BadCredentialsException("Username incorrect");
+        	throw new BadCredentialsException("Invalid credentials");
         }
 		return user;
 	}

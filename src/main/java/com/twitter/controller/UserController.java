@@ -32,16 +32,16 @@ public class UserController {
    } 
 	
 	@RequestMapping(method=RequestMethod.GET, value="/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String id) throws UserNotFoundException {
-        User user = userService.getUserById(id);
+    public ResponseEntity<?> getUser(@PathVariable String id) throws UserNotFoundException {
+        User user = userService.getUser(id);
         return new ResponseEntity<User>(user,HttpStatus.OK); 
     }
 	
 	@RequestMapping(method=RequestMethod.POST, value="/users/{id}/follow")
     public ResponseEntity<?> addFollowing(@PathVariable String id) throws UserNotFoundException, FollowException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String handle = authentication.getName();
-		User user = userService.getUserByHandle(handle);
+		String name = authentication.getName();
+		User user = userService.getUserByUsername(name);
 		userService.addFollowing(user,id);
         return new ResponseEntity<String>("Success",HttpStatus.OK); 
     }
@@ -49,8 +49,8 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.DELETE, value="/users/{id}/follow")
     public ResponseEntity<?> deleteFollowing(@PathVariable String id) throws UserNotFoundException, UnFollowException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String handle = authentication.getName();
-		User user = userService.getUserByHandle(handle);
+		String name = authentication.getName();
+		User user = userService.getUserByUsername(name);
 		userService.deleteFollowing(user,id);
         return new ResponseEntity<String>("Success",HttpStatus.OK); 
     }

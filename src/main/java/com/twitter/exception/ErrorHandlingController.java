@@ -37,8 +37,8 @@ public class ErrorHandlingController {
     public ResponseEntity<ErrorResponse> badCredentials(Exception ex) {
 		ErrorResponse response = new ErrorResponse();
         response.setErrorMessage(ex.getMessage());
-        response.setErrorStatus(HttpStatus.FORBIDDEN);
-        return new ResponseEntity<ErrorResponse>(response, HttpStatus.FORBIDDEN);
+        response.setErrorStatus(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<ErrorResponse>(response, HttpStatus.UNAUTHORIZED);
     }
 	
 	@ExceptionHandler(Exception.class)

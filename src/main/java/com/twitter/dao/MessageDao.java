@@ -10,9 +10,9 @@ import com.twitter.entity.Message;
 
 public interface MessageDao {
 	
-	List<Message> getMyFeeds (User u) throws UserNotFoundException;
-	List<Message> getFollowingFeeds(User u) throws UserNotFoundException;
-	List<Message> getMyFeeds(User u,String search) throws UserNotFoundException;
-	List<Message> getFollowingFeeds(User u,String search) throws UserNotFoundException;
+	List<Message> getMyFeeds (User user) throws UserNotFoundException;
+	List<Message> getFollowingFeeds(User user) throws UserNotFoundException;
+	List<Message> getMyFeeds(User user,String search) throws UserNotFoundException;
+	List<Message> getFollowingFeeds(User user,String search) throws UserNotFoundException;
 
 }

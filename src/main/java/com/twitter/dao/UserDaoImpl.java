@@ -80,8 +80,6 @@ public class UserDaoImpl implements UserDao{
 		
 		
 		//Check if the current user already follows the target user
-		//SqlParameterSource namedParameter = new MapSqlParameterSource("person_id", targetUser.getId()).addValue("follower_person_id", currentUser.getId());
-		//Integer count = namedParameterJdbcTemplate.queryForObject(SQLQueries.CHECK_COUNT, namedParameter, Integer.class);
 		if(checkFollowing(currentUser,targetUser)){
 			throw new FollowException("User "+ currentUser.getHandle() +" is already following the user "+ targetUser.getHandle());
 		}
@@ -101,7 +99,6 @@ public class UserDaoImpl implements UserDao{
 		
 		//Check if the current user follows the target user
 		SqlParameterSource namedParameter = new MapSqlParameterSource("person_id", targetUser.getId()).addValue("follower_person_id", currentUser.getId());
-		//Integer count = namedParameterJdbcTemplate.queryForObject(SQLQueries.CHECK_COUNT, namedParameter, Integer.class);
 		if(!checkFollowing(currentUser,targetUser)){
 			throw new UnFollowException("User "+ currentUser.getHandle() +" does not follow user "+ targetUser.getHandle());
 		}
@@ -133,6 +130,20 @@ public class UserDaoImpl implements UserDao{
 		User user = null;
 		try{
 		 user = namedParameterJdbcTemplate.queryForObject(SQLQueries.USER_BY_HANDLE, namedParameter, new UserMapper());
+		}catch(EmptyResultDataAccessException e){
+			throw new UserNotFoundException("User not found");
+		}
+		if(user==null)
+			throw new UserNotFoundException("User not found");
+		return user;
+	}
+	
+	@Override
+	public User getUserByUsername(String name) throws UserNotFoundException{
+		SqlParameterSource namedParameter = new MapSqlParameterSource("name", name);
+		User user = null;
+		try{
+		 user = namedParameterJdbcTemplate.queryForObject(SQLQueries.USER_BY_USERNAME, namedParameter, new UserMapper());
 		}catch(EmptyResultDataAccessException e){
 			throw new UserNotFoundException("User not found");
 		}

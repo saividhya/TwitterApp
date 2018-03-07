@@ -9,7 +9,9 @@ import com.twitter.exception.UserNotFoundException;
 
 public interface UserService {
 	public List<User> getUsers() throws UserNotFoundException;
+	public User getUser(String id) throws UserNotFoundException;
 	public User getUserById(String id) throws UserNotFoundException;
+	public User getUserByUsername(String name) throws UserNotFoundException;
 	public User getUserByName(String name) throws UserNotFoundException;
 	public User getUserByHandle(String handle) throws UserNotFoundException;
 	void addFollowing(User user,String following_id) throws UserNotFoundException, FollowException;

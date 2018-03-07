@@ -12,10 +12,11 @@ public interface UserDao {
 
 	List<User> getUsers() throws UserNotFoundException;
 	User getUserById(String id) throws UserNotFoundException;
+	User getUserByUsername(String name) throws UserNotFoundException;
 	User getUserByName(String name) throws UserNotFoundException;
 	User getUserByHandle(String handle) throws UserNotFoundException;
-	List<User> getFollowers(User u) throws FollowException;
-	List<User> getFollowing(User u) throws FollowException;
+	List<User> getFollowers(User user) throws FollowException;
+	List<User> getFollowing(User user) throws FollowException;
 	List<PopularUsersDTO> getPopularUsers()  throws UserNotFoundException;
 	boolean checkFollowing(User currentUser, User targetUser);
 	void addFollowing(User currentUser, User targetUser) throws FollowException;
