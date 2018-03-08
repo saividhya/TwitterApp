@@ -1,5 +1,5 @@
 # TwitterApp
-TwitterApp - RestFul APIs for twitter to view feeds, followers, follow / unfollow users using Spring Boot, H2 In-memory SQL database and Spring Basic authenitcation.
+RestFul APIs for twitter to view feeds, followers, follow / unfollow users using Spring Boot, H2 In-memory SQL database and Spring Basic authenitcation.
 
 All the below APIs are authenticated using **HTTP Basic Authentication.** 
 New fields for username and password have been added to the schema. The username and password are used to validate the user.
