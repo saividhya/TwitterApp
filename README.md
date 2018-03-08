@@ -27,6 +27,8 @@ Junit has been used to test all the DAO and services methods.
 
 To document the REST APIs, Swagger has been used. Swagger generates a user-friendly UI where the users can see all the RestAPI endpoints exposed along with the parameter details.
 It also allows users to try out the endpoints and check the results.
+
+![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger.PNG "Swagger UI")
  
 **API details**
 
@@ -86,6 +88,8 @@ Sample output
   ]
 }
 ```
+---
+
 2. An API to get the list of people the current user is following and also the followers of the current user. The output will have all the user's followers under "followers" object and
 the list of users he is following under "following" object.
 
@@ -127,6 +131,8 @@ Sample output
   ]
 }
 ```
+---
+
 3. An API to follow another user. This has to be a POST request to the endpoint and the {id} mentioned below is the id of the user the current user wants to follow. 
 This will throw exception if a user tries to follow another user whom he already follows.
 
@@ -134,12 +140,16 @@ RestAPI endpoint - http://localhost:8080/twitter/users/{id}/follow
 
 Method - POST
 
+---
+
 4. An API to unfollow a following user. This has to be a DELETE request to the endpoint and the {id} mentioned below is the id of the user the current user wants to unfollow.
 This will throw exception if a user tries to unfollow another user whom he does not follow.
 
 RestAPI endpoint - http://localhost:8080/twitter/users/{id}/follow
 
 Method - DELETE
+
+---
 
 5. An API to get the shortest distance to another user. The shortest distance is calculated as the number of hops to reach the target user ({id} is used to mention the target user) using the users the currentuser follow.
 
@@ -163,6 +173,8 @@ Sample output
   "noOfHops": 2
 }
 ```
+---
+
 
 6. An API to get the list of users alongwith their popular follower. Popular user is one who has maximum followers.
 
@@ -214,5 +226,5 @@ Sample output
   }
 ]
 ```
-
+---
 
