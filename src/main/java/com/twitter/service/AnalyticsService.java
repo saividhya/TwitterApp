@@ -11,7 +11,7 @@ import com.twitter.exception.FollowException;
 import com.twitter.exception.UserNotFoundException;
 
 public interface AnalyticsService {
-	public FriendsDTO getFriends(User user) throws FollowException;
+	public FriendsDTO getFriends(User user) throws UserNotFoundException;
 	public List<PopularUsersDTO> getPopularUsers() throws FollowException, UserNotFoundException;
 	public HopsDTO getHops(User user,String id)  throws UserNotFoundException, FollowException ;
 }

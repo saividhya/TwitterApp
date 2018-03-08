@@ -24,7 +24,7 @@ public class AnalyticsServiceImpl implements AnalyticsService{
 	
 
 	@Override
-	public FriendsDTO getFriends(User user) throws FollowException {
+	public FriendsDTO getFriends(User user) throws UserNotFoundException {
 		List<User> followers = userDao.getFollowers(user);
 		List<User> following = userDao.getFollowing(user);
 		FriendsDTO friendsDto = DTOUtility.convertFriendsDaoToDto(followers, following);

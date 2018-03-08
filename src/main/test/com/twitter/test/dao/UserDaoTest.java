@@ -33,143 +33,112 @@ public class UserDaoTest {
 	
 	//Test to get all users in the system
 	@Test
-	public void testGetUsers(){
-		try {
-			List<User> actualResult = userDao.getUsers();
-			assertEquals(14,actualResult.size());
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
+	public void testGetUsers() throws UserNotFoundException{
+		List<User> actualResult = userDao.getUsers();
+		assertEquals(14,actualResult.size());
 	}
 	
 	//Test to get a user with valid id
 	@Test
-	public void testGetUserById(){
+	public void testGetUserById() throws UserNotFoundException{
 		User testUser = ExpectedResultBuilder.getValidUser();
-		try {
-			User actualResult = userDao.getUserById("12");
-			assertEquals(testUser.getId(),actualResult.getId());
-			assertEquals(testUser.getName(),actualResult.getName());
-			assertEquals(testUser.getHandle(),actualResult.getHandle());
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
+		User actualResult = userDao.getUserById("12");
+		assertEquals(testUser.getId(),actualResult.getId());
+		assertEquals(testUser.getName(),actualResult.getName());
+		assertEquals(testUser.getHandle(),actualResult.getHandle());
 	}
 		
 	//Test for user with invalid id
-	@Test
-	public void testGetUserByIdInvalid(){
-		try {
-			User actualResult = userDao.getUserById("54"); 
-		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
-		}
+	@Test(expected = UserNotFoundException.class)
+	public void testGetUserByIdInvalid() throws UserNotFoundException{
+		User actualResult = userDao.getUserById("54"); 
 	}
 	//Test for user with followers
 	@Test
-	public void testGetFollowersValid(){
+	public void testGetFollowersValid() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		
-		try {
-			List<User> actualResult = userDao.getFollowers(testUser); 
-			List<User> expectedResult = ExpectedResultBuilder.getFollowersValid();
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getId(), actualResult.get(i).getId());
-				assertEquals(expectedResult.get(i).getHandle(), actualResult.get(i).getHandle());
-				assertEquals(expectedResult.get(i).getName(), actualResult.get(i).getName());
-			}
-			
-		} catch (FollowException e) {
-			assertEquals(null,e.getMessage());
+		List<User> actualResult = userDao.getFollowers(testUser); 
+		List<User> expectedResult = ExpectedResultBuilder.getFollowersValid();
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getId(), actualResult.get(i).getId());
+			assertEquals(expectedResult.get(i).getHandle(), actualResult.get(i).getHandle());
+			assertEquals(expectedResult.get(i).getName(), actualResult.get(i).getName());
 		}
 	}
 	
 	//Test for user with no followers
 	@Test
-	public void testGetFollowersInvalid(){
-		User testUser = new User();
-		testUser.setId(13);
-		testUser.setHandle("wolverine");
-		testUser.setName("Logan");
-		try {
-			List<User> actualResult = userDao.getFollowers(testUser); 
-		} catch (FollowException e) {
-			assertEquals("There are no followers for this user",e.getMessage());
-		}
-	}
-	
-	//Test for user who follows other users
-	@Test
-	public void testGetFollowingValid(){
-		User testUser = new User();
-		testUser.setId(13);
-		testUser.setHandle("wolverine");
-		testUser.setName("Logan");
-		try {
-			List<User> actualResult = userDao.getFollowing(testUser); 
-			List<User> expectedResult = ExpectedResultBuilder.getFollowingValid();
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getId(), actualResult.get(i).getId());
-				assertEquals(expectedResult.get(i).getHandle(), actualResult.get(i).getHandle());
-				assertEquals(expectedResult.get(i).getName(), actualResult.get(i).getName());
-			}
-			
-		} catch (FollowException e) {
-			assertEquals(null,e.getMessage());
-		}
-	}
-	
-	//Test for user who doesn't follow other users
-	@Test
-	public void testGetFollowingInValid(){
+	public void testGetFollowersInvalid() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(14);
 		testUser.setHandle("deathstroke");
 		testUser.setName("Slade Wilson");
-		try {
-			List<User> actualResult = userDao.getFollowing(testUser);  
-			
-		} catch (FollowException e) {
-			assertEquals("The user does not follow anyone",e.getMessage());
-		}
+		List<User> actualResult = userDao.getFollowers(testUser); 
+		assertEquals(0,actualResult.size());
 	}
 	
-	  //Test for user with existing relationship
-		@Test
-		public void testCheckFollowingValid(){
-			User testUser1 = new User();
-			testUser1.setId(12);
-			testUser1.setHandle("phoenix");
-			testUser1.setName("Jean Grey");
-			
-			User testUser2 = new User();
-			testUser2.setId(13);
-			testUser2.setHandle("wolverine");
-			testUser2.setName("Logan");
-			assertEquals(true,userDao.checkFollowing(testUser2, testUser1)); 
-			
-		}
+	//Test for user who follows other users
+	@Test
+	public void testGetFollowingValid() throws UserNotFoundException{
+		User testUser = new User();
+		testUser.setId(13);
+		testUser.setHandle("wolverine");
+		testUser.setName("Logan");
+	 	List<User> actualResult = userDao.getFollowing(testUser); 
+		List<User> expectedResult = ExpectedResultBuilder.getFollowingValid();
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getId(), actualResult.get(i).getId());
+			assertEquals(expectedResult.get(i).getHandle(), actualResult.get(i).getHandle());
+			assertEquals(expectedResult.get(i).getName(), actualResult.get(i).getName());
+		} 
+	}
+	
+	//Test for user who doesn't follow other users
+	@Test
+	public void testGetFollowingInValid() throws UserNotFoundException{
+		User testUser = new User();
+		testUser.setId(14);
+		testUser.setHandle("deathstroke");
+		testUser.setName("Slade Wilson");
+ 		List<User> actualResult = userDao.getFollowing(testUser);  
+		assertEquals(0,actualResult.size());
+	 }
+	
+    //Test for user with existing relationship
+	@Test
+	public void testCheckFollowingValid(){
+		User testUser1 = new User();
+		testUser1.setId(12);
+		testUser1.setHandle("phoenix");
+		testUser1.setName("Jean Grey");
 		
-		//Test to check for a no existing relationship
-		@Test
-		public void testCheckFollowingInvalid(){
-			User user11 = new User();
-			user11.setId(11);
-			user11.setName("Barry Allen");
-			user11.setHandle("flash");
+		User testUser2 = new User();
+		testUser2.setId(13);
+		testUser2.setHandle("wolverine");
+		testUser2.setName("Logan");
+		assertEquals(true,userDao.checkFollowing(testUser2, testUser1)); 
+		
+	}
+		
+	//Test to check for a no existing relationship
+	@Test
+	public void testCheckFollowingInvalid(){
+		User user11 = new User();
+		user11.setId(11);
+		user11.setName("Barry Allen");
+		user11.setHandle("flash");
 			
-			User user1 = new User();
-			user1.setId(1);
-			user1.setName("Bruce Wayne");
-			user1.setHandle("batman");
-			assertEquals(false,userDao.checkFollowing(user1, user11));
-		}
+		User user1 = new User();
+		user1.setId(1);
+		user1.setName("Bruce Wayne");
+		user1.setHandle("batman");
+		assertEquals(false,userDao.checkFollowing(user1, user11));
+	}
 		
 	
 	//Test for user with existing relationship
@@ -194,7 +163,7 @@ public class UserDaoTest {
 	
 	//Test to add new relationship
 	@Test
-	public void testAddFollowingValid(){
+	public void testAddFollowingValid() throws FollowException{
 		User user11 = new User();
 		user11.setId(11);
 		user11.setName("Barry Allen");
@@ -204,18 +173,13 @@ public class UserDaoTest {
 		user1.setId(1);
 		user1.setName("Bruce Wayne");
 		user1.setHandle("batman");
-		
-		try {
-			userDao.addFollowing(user1,user11); 
-			assertEquals(true,userDao.checkFollowing(user1, user11));
-		} catch (FollowException e) { 
-			assertEquals(null,e.getMessage());
-		}
+	 	userDao.addFollowing(user1,user11); 
+		assertEquals(true,userDao.checkFollowing(user1, user11));
 	}
 	
 	//Test for unfollow for valid relationship
 	@Test
-	public void testDeleteFollowingValid(){
+	public void testDeleteFollowingValid() throws UnFollowException{
 		User user5 = new User();
 		user5.setId(5);
 		user5.setName("Alfred Pennyworth");
@@ -225,13 +189,8 @@ public class UserDaoTest {
 		user1.setId(1);
 		user1.setName("Bruce Wayne");
 		user1.setHandle("batman");
-		
-		try {
-			userDao.deleteFollowing(user1,user5);
-			assertEquals(false,userDao.checkFollowing(user1, user5));
-		} catch (UnFollowException e) {
-			assertEquals(null,e.getMessage());
-		}
+		userDao.deleteFollowing(user1,user5);
+		assertEquals(false,userDao.checkFollowing(user1, user5));
 	}
 	
 	//Test for unfollowing a relation which is not present
@@ -258,71 +217,49 @@ public class UserDaoTest {
 	
 	//Test to get a user with valid name
 	@Test
-	public void testGetUserByName(){
+	public void testGetUserByName() throws UserNotFoundException{
 		User testUser = ExpectedResultBuilder.getValidUser();
-		try {
-			User actualResult = userDao.getUserByName("Jean Grey");
-			assertEquals(testUser.getId(),actualResult.getId());
-			assertEquals(testUser.getName(),actualResult.getName());
-			assertEquals(testUser.getHandle(),actualResult.getHandle());
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
-	}
+	 	User actualResult = userDao.getUserByName("Jean Grey");
+		assertEquals(testUser.getId(),actualResult.getId());
+		assertEquals(testUser.getName(),actualResult.getName());
+		assertEquals(testUser.getHandle(),actualResult.getHandle());
+	 }
 
 	//Test to get a user with invalid name
-	@Test
-	public void testGetUserByNameInvalid(){
-		try {
-			User actualResult = userDao.getUserByName("testinvalid");
-		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
-		}
+	@Test(expected = UserNotFoundException.class)
+	public void testGetUserByNameInvalid() throws UserNotFoundException{
+	 	User actualResult = userDao.getUserByName("testinvalid");
 	}
 
 	//Test to get a user with valid handle
 	@Test
-	public void testGetUserByHandle(){
+	public void testGetUserByHandle() throws UserNotFoundException{
 		User testUser = ExpectedResultBuilder.getValidUser();
-		try {
-			User actualResult = userDao.getUserByHandle("phoenix");
-			System.out.println(actualResult.getName());
-			assertEquals(testUser.getId(),actualResult.getId());
-			assertEquals(testUser.getName(),actualResult.getName());
-			assertEquals(testUser.getHandle(),actualResult.getHandle());
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
-	}
+ 		User actualResult = userDao.getUserByHandle("phoenix");
+		System.out.println(actualResult.getName());
+		assertEquals(testUser.getId(),actualResult.getId());
+		assertEquals(testUser.getName(),actualResult.getName());
+		assertEquals(testUser.getHandle(),actualResult.getHandle());
+	 }
 
 	//Test to get a user with invalid handle
-	@Test
-	public void testGetUserByHandleInvalid(){
-		try {
-			User actualResult = userDao.getUserByHandle("testinvalid");
-		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
-		}
+	@Test(expected = UserNotFoundException.class)
+	public void testGetUserByHandleInvalid() throws UserNotFoundException{
+	 	User actualResult = userDao.getUserByHandle("testinvalid");
 	}
 
 	// Test to get a user with invalid handle
 	@Test
-	public void testGetPopularUsers(){
-		try {
-			List<PopularUsersDAO> actualResult = userDao.getPopularUsers();
-			List<PopularUsersDTO> expectedResult = ExpectedResultBuilder.getPopularUsers();
-			
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-			}
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
+	public void testGetPopularUsers() throws UserNotFoundException{
+	 	List<PopularUsersDAO> actualResult = userDao.getPopularUsers();
+		List<PopularUsersDTO> expectedResult = ExpectedResultBuilder.getPopularUsers();
+		
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+		} 
 	}
 	
 }

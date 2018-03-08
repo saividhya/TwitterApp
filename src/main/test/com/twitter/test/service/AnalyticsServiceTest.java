@@ -28,129 +28,97 @@ public class AnalyticsServiceTest {
 	AnalyticsService analyticsService;
 	
 	@Test
-	public void testGetFriends(){
+	public void testGetFriends() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		try {
-			FriendsDTO actualResult = analyticsService.getFriends(testUser);
-			FriendsDTO expectedResult = ExpectedResultBuilder.getFriends();
-			assertEquals(expectedResult.getFollowers().size(),actualResult.getFollowers().size());
-			assertEquals(expectedResult.getFollowing().size(),actualResult.getFollowing().size());
-			for(int i=0;i < actualResult.getFollowers().size();i++){
-				assertEquals(expectedResult.getFollowers().get(i).getId(), actualResult.getFollowers().get(i).getId());
-				assertEquals(expectedResult.getFollowers().get(i).getHandle(), actualResult.getFollowers().get(i).getHandle());
-				assertEquals(expectedResult.getFollowers().get(i).getName(), actualResult.getFollowers().get(i).getName());
-			}
-			
-		} catch (FollowException e) { 
-			assertEquals(null,e.getMessage());
-		}
+	 	FriendsDTO actualResult = analyticsService.getFriends(testUser);
+		FriendsDTO expectedResult = ExpectedResultBuilder.getFriends();
+		assertEquals(expectedResult.getFollowers().size(),actualResult.getFollowers().size());
+		assertEquals(expectedResult.getFollowing().size(),actualResult.getFollowing().size());
+		for(int i=0;i < actualResult.getFollowers().size();i++){
+			assertEquals(expectedResult.getFollowers().get(i).getId(), actualResult.getFollowers().get(i).getId());
+			assertEquals(expectedResult.getFollowers().get(i).getHandle(), actualResult.getFollowers().get(i).getHandle());
+			assertEquals(expectedResult.getFollowers().get(i).getName(), actualResult.getFollowers().get(i).getName());
+		} 
 	}
 
 	@Test
-	public void testGetFriendsInvalid(){
+	public void testGetFriendsInvalid() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(14);
 		testUser.setHandle("deathstroke");
 		testUser.setName("Slade Wilson");
-		try {
-			FriendsDTO actualResult = analyticsService.getFriends(testUser);
-			assertEquals(0,actualResult.getFollowers().size());
-			assertEquals(0,actualResult.getFollowing().size());
-		} catch (FollowException e) { 
-			assertEquals(null,e.getMessage());
-		}
+	 	FriendsDTO actualResult = analyticsService.getFriends(testUser);
+		assertEquals(0,actualResult.getFollowers().size());
+		assertEquals(0,actualResult.getFollowing().size()); 
 	}
 
 	@Test
-	public void testGetHops(){
+	public void testGetHops() throws UserNotFoundException, FollowException{
 		User testUser = new User();
 		testUser.setId(1);
 		testUser.setHandle("batman");
 		testUser.setName("Bruce Wayne");
 		
 		HopsDTO actualResult;
-		try {
-			actualResult = analyticsService.getHops(testUser, "5");
-			HopsDTO expectedResult = ExpectedResultBuilder.getHops();
-			
-			assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
-			assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
-			assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
-			
-			assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
-			assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
-			assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
-			
-			assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		} catch (FollowException e) {
-			assertEquals(null,e.getMessage());
-		}
+	 	actualResult = analyticsService.getHops(testUser, "5");
+		HopsDTO expectedResult = ExpectedResultBuilder.getHops();
 		
-	}
+		assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
+		assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
+		assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
+		
+		assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
+		assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
+		assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
+		
+		assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops()); 
+	 }
 
 	@Test
-	public void testGetHopsSelf(){
+	public void testGetHopsSelf() throws UserNotFoundException, FollowException{
 		User testUser = new User();
 		testUser.setId(1);
 		testUser.setHandle("batman");
 		testUser.setName("Bruce Wayne");
 		
 		HopsDTO actualResult;
-		try {
-			actualResult = analyticsService.getHops(testUser, "1");
-			HopsDTO expectedResult = ExpectedResultBuilder.getHopsSelf();
-			
-			assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
-			assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
-			assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
-			
-			assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
-			assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
-			assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
-			
-			assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		} catch (FollowException e) {
-			assertEquals(null,e.getMessage());
-		}
+	 	actualResult = analyticsService.getHops(testUser, "1");
+		HopsDTO expectedResult = ExpectedResultBuilder.getHopsSelf();
 		
-	}
+		assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
+		assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
+		assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
+		
+		assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
+		assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
+		assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
+		
+		assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
+	 }
 
 	@Test
-	public void testGetHopsNoHops(){
+	public void testGetHopsNoHops() throws UserNotFoundException, FollowException{
 		User testUser = new User();
 		testUser.setId(1);
 		testUser.setHandle("batman");
 		testUser.setName("Bruce Wayne");
 		
 		HopsDTO actualResult;
-		try {
-			actualResult = analyticsService.getHops(testUser, "14");
-			HopsDTO expectedResult = ExpectedResultBuilder.getHopsNoHops();
-			
-			assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
-			assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
-			assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
-			
-			assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
-			assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
-			assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
-			
-			assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops());
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		} catch (FollowException e) {
-			assertEquals(null,e.getMessage());
-		}
+	 	actualResult = analyticsService.getHops(testUser, "14");
+		HopsDTO expectedResult = ExpectedResultBuilder.getHopsNoHops();
+		
+		assertEquals(expectedResult.getCurrentUser().getId(), actualResult.getCurrentUser().getId());
+		assertEquals(expectedResult.getCurrentUser().getHandle(), actualResult.getCurrentUser().getHandle());
+		assertEquals(expectedResult.getCurrentUser().getName(), actualResult.getCurrentUser().getName());
+		
+		assertEquals(expectedResult.getTargetUser().getId(), actualResult.getTargetUser().getId());
+		assertEquals(expectedResult.getTargetUser().getHandle(), actualResult.getTargetUser().getHandle());
+		assertEquals(expectedResult.getTargetUser().getName(), actualResult.getTargetUser().getName());
+		
+		assertEquals(expectedResult.getNoOfHops(), actualResult.getNoOfHops()); 
 		
 	}
 	

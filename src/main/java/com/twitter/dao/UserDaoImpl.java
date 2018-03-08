@@ -52,26 +52,30 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	@Override
-	public List<User> getFollowers(User user) throws FollowException {
+	public List<User> getFollowers(User user) throws UserNotFoundException {
+		if(user==null || user.getId()==0){
+			throw new UserNotFoundException("User not found");
+		}
+		if(getUserById(String.valueOf(user.getId()))==null){
+			throw new UserNotFoundException("User not found");
+		}
 		List<User> users = null;
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId());
-		try{
-		 users = namedParameterJdbcTemplate.query(SQLQueries.FOLLOWERS, namedParameter, new UserMapper());
-		}catch(EmptyResultDataAccessException e){
-			throw new FollowException("There are no followers for this user");
-		}
+		users = namedParameterJdbcTemplate.query(SQLQueries.FOLLOWERS, namedParameter, new UserMapper());
 		return users;
 	}
 
 	@Override
-	public List<User> getFollowing(User user) throws FollowException {
+	public List<User> getFollowing(User user) throws UserNotFoundException {
+		if(user==null || user.getId()==0){
+			throw new UserNotFoundException("User not found");
+		}
+		if(getUserById(String.valueOf(user.getId()))==null){
+			throw new UserNotFoundException("User not found");
+		}
 		List<User> users = null;
 		SqlParameterSource namedParameter = new MapSqlParameterSource("id", user.getId());
-		try{
-		 users = namedParameterJdbcTemplate.query(SQLQueries.FOLLOWING, namedParameter, new UserMapper());
-		}catch(EmptyResultDataAccessException e){
-			throw new FollowException("The user does not follow anyone");
-		}
+		users = namedParameterJdbcTemplate.query(SQLQueries.FOLLOWING, namedParameter, new UserMapper());
 		return users;
 	}
 

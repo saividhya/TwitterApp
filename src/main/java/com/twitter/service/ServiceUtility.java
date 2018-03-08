@@ -8,11 +8,12 @@ import java.util.Queue;
 import com.twitter.dao.UserDao;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
+import com.twitter.exception.UserNotFoundException;
 
 public class ServiceUtility {
 	
 	 
-	public int getShortestDistance(User currentUser, User targetUser,UserDao userDao) throws FollowException {
+	public int getShortestDistance(User currentUser, User targetUser,UserDao userDao) throws UserNotFoundException {
 		if(currentUser.getId() == targetUser.getId()){
 			return 0;
 		}

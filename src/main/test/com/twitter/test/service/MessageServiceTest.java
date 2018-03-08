@@ -30,101 +30,84 @@ public class MessageServiceTest {
 	MessageService messsageService;
 	
 	@Test
-	public void testMyFeedsWithValidUser(){
+	public void testMyFeedsWithValidUser() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		try {
-			MessagesDTO actualResult = messsageService.getMessages(testUser);
-			MessagesDTO expectedResult = ExpectedResultBuilder.getMessages();
-			
-			assertEquals(expectedResult.getMyFeeds().size(),actualResult.getMyFeeds().size());
-			for(int i=0;i < actualResult.getMyFeeds().size();i++){
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getId(), actualResult.getMyFeeds().get(i).getUser().getId());
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getHandle(), actualResult.getMyFeeds().get(i).getUser().getHandle());
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getName(), actualResult.getMyFeeds().get(i).getUser().getName());
-				assertEquals(expectedResult.getMyFeeds().get(i).getContent(), actualResult.getMyFeeds().get(i).getContent());
-			}
-			
-			assertEquals(expectedResult.getFollowingFeeds().size(),actualResult.getFollowingFeeds().size());
-			for(int i=0;i < actualResult.getFollowingFeeds().size();i++){
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getId(), actualResult.getFollowingFeeds().get(i).getUser().getId());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getHandle(), actualResult.getFollowingFeeds().get(i).getUser().getHandle());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getName(), actualResult.getFollowingFeeds().get(i).getUser().getName());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getContent(), actualResult.getFollowingFeeds().get(i).getContent());
-			}
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+	 	MessagesDTO actualResult = messsageService.getMessages(testUser);
+		MessagesDTO expectedResult = ExpectedResultBuilder.getMessages();
+		
+		assertEquals(expectedResult.getMyFeeds().size(),actualResult.getMyFeeds().size());
+		for(int i=0;i < actualResult.getMyFeeds().size();i++){
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getId(), actualResult.getMyFeeds().get(i).getUser().getId());
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getHandle(), actualResult.getMyFeeds().get(i).getUser().getHandle());
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getName(), actualResult.getMyFeeds().get(i).getUser().getName());
+			assertEquals(expectedResult.getMyFeeds().get(i).getContent(), actualResult.getMyFeeds().get(i).getContent());
 		}
 		
+		assertEquals(expectedResult.getFollowingFeeds().size(),actualResult.getFollowingFeeds().size());
+		for(int i=0;i < actualResult.getFollowingFeeds().size();i++){
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getId(), actualResult.getFollowingFeeds().get(i).getUser().getId());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getHandle(), actualResult.getFollowingFeeds().get(i).getUser().getHandle());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getName(), actualResult.getFollowingFeeds().get(i).getUser().getName());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getContent(), actualResult.getFollowingFeeds().get(i).getContent());
+		} 
 	}
 	
 	@Test
-	public void testMyFeedsWithValidUserAndSearch(){
+	public void testMyFeedsWithValidUserAndSearch() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		try {
-			String search = "do";
-			MessagesDTO actualResult = messsageService.getMessages(testUser,search);
-			MessagesDTO expectedResult = ExpectedResultBuilder.getMessagesWithSearch();
-			
-			assertEquals(expectedResult.getMyFeeds().size(),actualResult.getMyFeeds().size());
-			for(int i=0;i < actualResult.getMyFeeds().size();i++){
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getId(), actualResult.getMyFeeds().get(i).getUser().getId());
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getHandle(), actualResult.getMyFeeds().get(i).getUser().getHandle());
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getName(), actualResult.getMyFeeds().get(i).getUser().getName());
-				assertEquals(expectedResult.getMyFeeds().get(i).getContent(), actualResult.getMyFeeds().get(i).getContent());
-			}
-			
-			assertEquals(expectedResult.getFollowingFeeds().size(),actualResult.getFollowingFeeds().size());
-			for(int i=0;i < actualResult.getFollowingFeeds().size();i++){
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getId(), actualResult.getFollowingFeeds().get(i).getUser().getId());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getHandle(), actualResult.getFollowingFeeds().get(i).getUser().getHandle());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getName(), actualResult.getFollowingFeeds().get(i).getUser().getName());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getContent(), actualResult.getFollowingFeeds().get(i).getContent());
-			}
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+	 	String search = "do";
+		MessagesDTO actualResult = messsageService.getMessages(testUser,search);
+		MessagesDTO expectedResult = ExpectedResultBuilder.getMessagesWithSearch();
+		
+		assertEquals(expectedResult.getMyFeeds().size(),actualResult.getMyFeeds().size());
+		for(int i=0;i < actualResult.getMyFeeds().size();i++){
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getId(), actualResult.getMyFeeds().get(i).getUser().getId());
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getHandle(), actualResult.getMyFeeds().get(i).getUser().getHandle());
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getName(), actualResult.getMyFeeds().get(i).getUser().getName());
+			assertEquals(expectedResult.getMyFeeds().get(i).getContent(), actualResult.getMyFeeds().get(i).getContent());
 		}
 		
+		assertEquals(expectedResult.getFollowingFeeds().size(),actualResult.getFollowingFeeds().size());
+		for(int i=0;i < actualResult.getFollowingFeeds().size();i++){
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getId(), actualResult.getFollowingFeeds().get(i).getUser().getId());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getHandle(), actualResult.getFollowingFeeds().get(i).getUser().getHandle());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getName(), actualResult.getFollowingFeeds().get(i).getUser().getName());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getContent(), actualResult.getFollowingFeeds().get(i).getContent());
+		}
+		 
 	}
 
 	@Test
-	public void testMyFeedsWithValidUserAndNoSearch(){
+	public void testMyFeedsWithValidUserAndNoSearch() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		try {
-			String search = "";
-			MessagesDTO actualResult = messsageService.getMessages(testUser,search);
-			MessagesDTO expectedResult = ExpectedResultBuilder.getMessages();
-			
-			assertEquals(expectedResult.getMyFeeds().size(),actualResult.getMyFeeds().size());
-			for(int i=0;i < actualResult.getMyFeeds().size();i++){
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getId(), actualResult.getMyFeeds().get(i).getUser().getId());
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getHandle(), actualResult.getMyFeeds().get(i).getUser().getHandle());
-				assertEquals(expectedResult.getMyFeeds().get(i).getUser().getName(), actualResult.getMyFeeds().get(i).getUser().getName());
-				assertEquals(expectedResult.getMyFeeds().get(i).getContent(), actualResult.getMyFeeds().get(i).getContent());
-			}
-			
-			assertEquals(expectedResult.getFollowingFeeds().size(),actualResult.getFollowingFeeds().size());
-			for(int i=0;i < actualResult.getFollowingFeeds().size();i++){
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getId(), actualResult.getFollowingFeeds().get(i).getUser().getId());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getHandle(), actualResult.getFollowingFeeds().get(i).getUser().getHandle());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getName(), actualResult.getFollowingFeeds().get(i).getUser().getName());
-				assertEquals(expectedResult.getFollowingFeeds().get(i).getContent(), actualResult.getFollowingFeeds().get(i).getContent());
-			}
-			
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+	 	String search = "";
+		MessagesDTO actualResult = messsageService.getMessages(testUser,search);
+		MessagesDTO expectedResult = ExpectedResultBuilder.getMessages();
+		
+		assertEquals(expectedResult.getMyFeeds().size(),actualResult.getMyFeeds().size());
+		for(int i=0;i < actualResult.getMyFeeds().size();i++){
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getId(), actualResult.getMyFeeds().get(i).getUser().getId());
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getHandle(), actualResult.getMyFeeds().get(i).getUser().getHandle());
+			assertEquals(expectedResult.getMyFeeds().get(i).getUser().getName(), actualResult.getMyFeeds().get(i).getUser().getName());
+			assertEquals(expectedResult.getMyFeeds().get(i).getContent(), actualResult.getMyFeeds().get(i).getContent());
 		}
 		
+		assertEquals(expectedResult.getFollowingFeeds().size(),actualResult.getFollowingFeeds().size());
+		for(int i=0;i < actualResult.getFollowingFeeds().size();i++){
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getId(), actualResult.getFollowingFeeds().get(i).getUser().getId());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getHandle(), actualResult.getFollowingFeeds().get(i).getUser().getHandle());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getUser().getName(), actualResult.getFollowingFeeds().get(i).getUser().getName());
+			assertEquals(expectedResult.getFollowingFeeds().get(i).getContent(), actualResult.getFollowingFeeds().get(i).getContent());
+		}  
 	}
 
 }

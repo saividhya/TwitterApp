@@ -2,7 +2,6 @@ package com.twitter.test.dao;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -32,230 +31,181 @@ public class MessageDaoTest {
 	
 	//Test for a valid user with feeds
 	@Test
-	public void testMyFeedsWithValidUser(){
+	public void testMyFeedsWithValidUser() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		try {
-			List<Message> actualResult = messageDao.getMyFeeds(testUser);
-			List<Message> expectedResult = ExpectedResultBuilder.getMyFeeds();
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-				assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
-			}
-		} catch (UserNotFoundException e) {
-			System.out.println(e.getMessage());
+	 	List<Message> actualResult = messageDao.getMyFeeds(testUser);
+		List<Message> expectedResult = ExpectedResultBuilder.getMyFeeds();
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+			assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
 		}
-		
 	}
 	
 	//Test for invalid user
-	@Test
-	public void testMyFeedsWithInValidUser(){
+	@Test(expected = UserNotFoundException.class)
+	public void testMyFeedsWithInValidUser() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(54);
 		testUser.setHandle("invalid");
 		testUser.setName("Invalid user");
-		try {
-			List<Message> actualResult = messageDao.getMyFeeds(testUser);
-		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
-		}
+		List<Message> actualResult = messageDao.getMyFeeds(testUser);
 	}
 	
 	//Test for users with no feed
 	@Test
-	public void testMyFeedsWithValidUserWithNoFeed(){
+	public void testMyFeedsWithValidUserWithNoFeed() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(14);
 		testUser.setHandle("deathstroke");
 		testUser.setName("Slade Wilson");
-		try {
-			List<Message> actualResult = messageDao.getMyFeeds(testUser);
-			assertEquals(0,actualResult.size());
-		} catch (UserNotFoundException e) {
-			System.out.println(e.getMessage());
-		}
+		List<Message> actualResult = messageDao.getMyFeeds(testUser);
+		assertEquals(0,actualResult.size());
 	}
 	
 	//Test for content with search query
 	@Test
-	public void testMyFeedsWithSearchQuery(){
+	public void testMyFeedsWithSearchQuery() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(13);
 		testUser.setHandle("wolverine");
 		testUser.setName("Logan");
-		try {
-			String search = "look";
-			List<Message> actualResult = messageDao.getMyFeeds(testUser,search);
-			List<Message> expectedResult = ExpectedResultBuilder.getMyFeedsWithSearch();
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-				assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
-			}
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+	 	String search = "look";
+		List<Message> actualResult = messageDao.getMyFeeds(testUser,search);
+		List<Message> expectedResult = ExpectedResultBuilder.getMyFeedsWithSearch();
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+			assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
 		}
 	}
 	
 	//Test for content with search query no result
 	@Test
-	public void testMyFeedsWithSearchQueryNoResult(){
+	public void testMyFeedsWithSearchQueryNoResult() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(13);
 		testUser.setHandle("wolverine");
 		testUser.setName("Logan");
-		try {
-			String search = "jean";
-			List<Message> actualResult = messageDao.getMyFeeds(testUser,search);
-			assertEquals(0,actualResult.size());
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
+		String search = "jean";
+		List<Message> actualResult = messageDao.getMyFeeds(testUser,search);
+		assertEquals(0,actualResult.size());
 	}
 		
 	//Test for content with empty search query
 	@Test
-	public void testMyFeedsWithEmptySearchQuery(){
+	public void testMyFeedsWithEmptySearchQuery() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(12);
 		testUser.setHandle("phoenix");
 		testUser.setName("Jean Grey");
-		try {
-			String search = "";
-			List<Message> actualResult = messageDao.getMyFeeds(testUser,search);
-			List<Message> expectedResult = ExpectedResultBuilder.getMyFeeds();
-			
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-				assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
-			}
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+	 	String search = "";
+		List<Message> actualResult = messageDao.getMyFeeds(testUser,search);
+		List<Message> expectedResult = ExpectedResultBuilder.getMyFeeds();
+		
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+			assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
 		}
 	}
 		
 	//Test for a valid user with following feeds
 	@Test
-	public void testFollowingFeedsWithValidUser(){
+	public void testFollowingFeedsWithValidUser() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(13);
 		testUser.setHandle("wolverine");
 		testUser.setName("Logan");
-		try {
-			List<Message> actualResult = messageDao.getFollowingFeeds(testUser);
-			List<Message> expectedResult = ExpectedResultBuilder.getFollowingFeeds();
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-				assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
-			}
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+		List<Message> actualResult = messageDao.getFollowingFeeds(testUser);
+		List<Message> expectedResult = ExpectedResultBuilder.getFollowingFeeds();
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+			assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
 		}
 	}
 	
 	//Test for invalid user
-	@Test
-	public void testFollowingFeedsWithInValidUser(){
+	@Test(expected = UserNotFoundException.class)
+	public void testFollowingFeedsWithInValidUser() throws UserNotFoundException {
 		User testUser = new User();
 		testUser.setId(54);
 		testUser.setHandle("invalid");
 		testUser.setName("Invalid user");
-		try {
-			List<Message> actualResult = messageDao.getFollowingFeeds(testUser);
-		} catch (UserNotFoundException e) {
-			assertEquals("User not found",e.getMessage());
-		}
+		List<Message> actualResult = messageDao.getFollowingFeeds(testUser);
 	}
 		
 	//Test for a valid user with no following feeds
 	@Test
-	public void testFollowingFeedsWithForUserWithNoFollowing(){
+	public void testFollowingFeedsWithForUserWithNoFollowing() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(14);
 		testUser.setHandle("deathstroke");
 		testUser.setName("Slade Wilson");
-		try {
-			List<Message> actualResult = messageDao.getFollowingFeeds(testUser);
-			assertEquals(0,actualResult.size());
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
+		List<Message> actualResult = messageDao.getFollowingFeeds(testUser);
+		assertEquals(0,actualResult.size());
 	}
 		
 	//Test for content with search query in following feeds
 	@Test
-	public void testFollowingFeedsWithSearchQuery(){
+	public void testFollowingFeedsWithSearchQuery() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(13);
 		testUser.setHandle("wolverine");
 		testUser.setName("Logan");
-		try {
-			String search = "do";
-			List<Message> actualResult = messageDao.getFollowingFeeds(testUser,search);
-			List<Message> expectedResult = ExpectedResultBuilder.getFollowingFeedsWithSearch();
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-				assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
-			}
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+	 	String search = "do";
+		List<Message> actualResult = messageDao.getFollowingFeeds(testUser,search);
+		List<Message> expectedResult = ExpectedResultBuilder.getFollowingFeedsWithSearch();
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+			assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
 		}
 	}	
 
 	//Test for content with search query no result
 	@Test
-	public void testFollowingFeedsWithSearchQueryNoResult(){
+	public void testFollowingFeedsWithSearchQueryNoResult() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(13);
 		testUser.setHandle("wolverine");
 		testUser.setName("Logan");
-		try {
-			String search = "look";
-			List<Message> actualResult = messageDao.getFollowingFeeds(testUser,search);
-			assertEquals(0,actualResult.size());
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
-		}
+		String search = "look";
+		List<Message> actualResult = messageDao.getFollowingFeeds(testUser,search);
+		assertEquals(0,actualResult.size());
 	}
 		
 	//Test for content with empty search query
 	@Test
-	public void testFollowingFeedsWithEmptySearchQuery(){
+	public void testFollowingFeedsWithEmptySearchQuery() throws UserNotFoundException{
 		User testUser = new User();
 		testUser.setId(13);
 		testUser.setHandle("wolverine");
 		testUser.setName("Logan");
-		try {
-			String search = "";
-			List<Message> actualResult = messageDao.getFollowingFeeds(testUser,search);
-			List<Message> expectedResult = ExpectedResultBuilder.getFollowingFeeds();
-			
-			assertEquals(expectedResult.size(),actualResult.size());
-			for(int i=0;i < actualResult.size();i++){
-				assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
-				assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
-				assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
-				assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
-			}
-		} catch (UserNotFoundException e) {
-			assertEquals(null,e.getMessage());
+		String search = "";
+		List<Message> actualResult = messageDao.getFollowingFeeds(testUser,search);
+		List<Message> expectedResult = ExpectedResultBuilder.getFollowingFeeds();
+		
+		assertEquals(expectedResult.size(),actualResult.size());
+		for(int i=0;i < actualResult.size();i++){
+			assertEquals(expectedResult.get(i).getUser().getId(), actualResult.get(i).getUser().getId());
+			assertEquals(expectedResult.get(i).getUser().getHandle(), actualResult.get(i).getUser().getHandle());
+			assertEquals(expectedResult.get(i).getUser().getName(), actualResult.get(i).getUser().getName());
+			assertEquals(expectedResult.get(i).getContent(), actualResult.get(i).getContent());
 		}
 	}
 		
