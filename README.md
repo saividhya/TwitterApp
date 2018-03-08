@@ -1,21 +1,20 @@
 # TwitterApp
 TwitterApp - RestFul APIs for twitter to view feeds, followers, follow / unfollow users using Spring Boot, H2 In-memory SQL database and Spring Basic authenitcation.
 
-All the below APIs are authenticated using Spring Basic Authentication. 
-The handle of the user is used to validate if the user is present in the system or not. 
-Since the people table didn't have password field, the handle alone is used to validate the user.
-To get the id of the current user for all below APIs, the id corresponding to the handle given in the authorization header is used. 
+All the below APIs are authenticated using **HTTP Basic Authentication.** 
+New fields for username and password have been added to the schema. The username and password are used to validate the user.
+To get the id of the current user for all below APIs, the id corresponding to the credentials given in the authorization header is used. 
 
 The entire project is divided into different layers - Entity, DAO, Service, DTO, Controller.
 
-All the models related to the app are created under entity. The DAO layer is used to query from the database and return results to the service layer.
+All the models related to the app are created under entity. The DAO layer is used to query the database and return results to the service layer.
 The service layer contains the business logic for the APIs. 
 For example, to find the shortest distance between the current user and target user, the BFS logic to find the distance is written in service layer.
 The message from DAO layer is not directly passed to controller. 
-Instead, for some cases where transformation is required, DTO layer is used to perform transformation from DAO to DTO.
+Instead, for some cases where transformation is required, DTO layer is used to perform transformation from DAO to DTO. 
 Finally, the DTO object is returned by the controller.
 
-Custom exceptions are created to throw application related exceptions. 
+Custom exceptions are also created to throw application related exceptions. 
 For example, If a user is trying to follow another user whom he already follows, an exception will be thrown.
 A Controller Advice is used to handle exceptions where the corresponsing Response status code and message is set for each custom exceptions and returned to the user.
 
@@ -26,7 +25,9 @@ Junit has been used to test all the DAO and services methods.
 **Rest API documentation**
 
 To document the REST APIs, Swagger has been used. Swagger generates a user-friendly UI where the users can see all the RestAPI endpoints exposed along with the parameter details.
-It also allows users to try out the endpoints and check the results.
+It also allows users to try out the endpoints and check the results. The Sample output provided below were taken using Swagger.
+
+![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger.PNG "Swagger UI")
  
 **API details**
 
@@ -86,6 +87,8 @@ Sample output
   ]
 }
 ```
+---
+
 2. An API to get the list of people the current user is following and also the followers of the current user. The output will have all the user's followers under "followers" object and
 the list of users he is following under "following" object.
 
@@ -127,6 +130,8 @@ Sample output
   ]
 }
 ```
+---
+
 3. An API to follow another user. This has to be a POST request to the endpoint and the {id} mentioned below is the id of the user the current user wants to follow. 
 This will throw exception if a user tries to follow another user whom he already follows.
 
@@ -134,12 +139,16 @@ RestAPI endpoint - http://localhost:8080/twitter/users/{id}/follow
 
 Method - POST
 
+---
+
 4. An API to unfollow a following user. This has to be a DELETE request to the endpoint and the {id} mentioned below is the id of the user the current user wants to unfollow.
 This will throw exception if a user tries to unfollow another user whom he does not follow.
 
 RestAPI endpoint - http://localhost:8080/twitter/users/{id}/follow
 
 Method - DELETE
+
+---
 
 5. An API to get the shortest distance to another user. The shortest distance is calculated as the number of hops to reach the target user ({id} is used to mention the target user) using the users the currentuser follow.
 
@@ -163,8 +172,10 @@ Sample output
   "noOfHops": 2
 }
 ```
+---
 
-6. An API to get the list of users alongwith their popular follower. Popular user is one who has maximum followers.
+
+6. An API to get the list of users alongwith their popular follower. Popular user is one who has maximum followers. The output will have for each user, the popular user and number of followers for that user.
 
 RestAPI endpoint - http://localhost:8080/twitter/popularUsers
 
@@ -214,5 +225,5 @@ Sample output
   }
 ]
 ```
-
+---
 
