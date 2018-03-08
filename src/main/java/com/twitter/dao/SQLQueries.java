@@ -7,19 +7,15 @@ public class SQLQueries {
 	public static final String MY_FEEDS = "select m.id,person_id,handle,name,content from messages m,"
 										+ " people p where p.id = m.person_id and m.person_id = :id  order by m.id";
 	
-	public static final String FOLLOWING_FEEDS = "select mid id,pid person_id,handle,name,content  from  "
-			+ " ( select m.id mid ,p.id  pid ,handle ,name ,content , follower_person_id from messages m,people p,followers f "
-			+ " where m.person_id = f.person_id and m.person_id = p.id and p.id = f.person_id ) "
-			+ " where follower_person_id = :id order by mid"; 
+	public static final String FOLLOWING_FEEDS = "select m.id id ,p.id  person_id ,handle ,name ,content , follower_person_id from messages m,people p,followers f "
+			+ " where m.person_id = f.person_id and m.person_id = p.id and p.id = f.person_id and follower_person_id = :id order by id "; 
 												
 	public static final String MYFEEDS_WITH_SEARCH =  "select m.id,person_id,handle,name,content  from messages m,people p "
 													+ " where p.id = m.person_id and m.person_id = :id and content like :search  order by m.id";
 	
 	
-	public static final String FOLLOWINGFEEDS_WITH_SEARCH = "select mid id,pid person_id,handle,name,content  from  "
-			+ " ( select m.id mid ,p.id  pid ,handle ,name ,content , follower_person_id from messages m,people p,followers f "
-			+ " where m.person_id = f.person_id and m.person_id = p.id and p.id = f.person_id ) "
-			+ " where follower_person_id = :id and content like :search order by mid"; 
+	public static final String FOLLOWINGFEEDS_WITH_SEARCH = "select m.id id ,p.id  person_id ,handle ,name ,content , follower_person_id from messages m,people p,followers f "
+			+ " where m.person_id = f.person_id and m.person_id = p.id and p.id = f.person_id and follower_person_id = :id and content like :search order by id "; 
 	
 	public static final String ALL_USERS =  "select p.id,handle,name from people p ";
 	
