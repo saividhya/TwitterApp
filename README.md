@@ -158,9 +158,9 @@ This will throw exception if a user tries to unfollow another user whom he does 
 
 5. An API to get the shortest distance to another user. The shortest distance is calculated as the number of hops to reach the target user ({id} is used to mention the target user) using the users the currentuser follow.
 
-RestAPI endpoint - http://localhost:8080/twitter/hops/{id}
+**RestAPI endpoint** - http://localhost:8080/twitter/hops/{id}
 
-Method - GET
+**Method** - GET
 
 Sample output
 ```json
