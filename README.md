@@ -29,6 +29,8 @@ It also allows users to try out the endpoints and check the results. The Sample 
 
 ![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger.PNG "Swagger UI")
 
+**Example**
+
 ![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger_2.PNG "Swagger UI")
 
 ![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger_3.PNG "Swagger UI")
@@ -42,9 +44,9 @@ You can also include a search parameter to filter the messages. If the search pa
 The output will have all the user's feeds under "myFeeds" object and the feeds from the users he follows in the "followingFeeds" object.
 
 
-RestAPI endpoint - http://localhost:8080/twitter/messages?search=do
+**RestAPI endpoint** - http://localhost:8080/twitter/messages?search=do
 
-Method - GET
+**Method** - GET
 
 Sample output
 ```json
@@ -96,9 +98,9 @@ Sample output
 2. An API to get the list of people the current user is following and also the followers of the current user. The output will have all the user's followers under "followers" object and
 the list of users he is following under "following" object.
 
-RestAPI endpoint - http://localhost:8080/twitter/friends
+**RestAPI endpoint** - http://localhost:8080/twitter/friends
 
-Method - GET
+**Method** - GET
 
 Sample output
 ```json
@@ -139,18 +141,18 @@ Sample output
 3. An API to follow another user. This has to be a POST request to the endpoint and the {id} mentioned below is the id of the user the current user wants to follow. 
 This will throw exception if a user tries to follow another user whom he already follows.
 
-RestAPI endpoint - http://localhost:8080/twitter/users/{id}/follow
+**RestAPI endpoint** - http://localhost:8080/twitter/users/{id}/follow
 
-Method - POST
+**Method** - POST
 
 ---
 
 4. An API to unfollow a following user. This has to be a DELETE request to the endpoint and the {id} mentioned below is the id of the user the current user wants to unfollow.
 This will throw exception if a user tries to unfollow another user whom he does not follow.
 
-RestAPI endpoint - http://localhost:8080/twitter/users/{id}/follow
+**RestAPI endpoint** - http://localhost:8080/twitter/users/{id}/follow
 
-Method - DELETE
+**Method** - DELETE
 
 ---
 
@@ -181,9 +183,9 @@ Sample output
 
 6. An API to get the list of users alongwith their popular follower. Popular user is one who has maximum followers. The output will have for each user, the popular user and number of followers for that user.
 
-RestAPI endpoint - http://localhost:8080/twitter/popularUsers
+**RestAPI endpoint** - http://localhost:8080/twitter/popularUsers
 
-Method - GET
+**Method** - GET
 
 Sample output
 ```json
