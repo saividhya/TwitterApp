@@ -28,6 +28,10 @@ To document the REST APIs, Swagger has been used. Swagger generates a user-frien
 It also allows users to try out the endpoints and check the results. The Sample output provided below were taken using Swagger.
 
 ![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger.PNG "Swagger UI")
+
+![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger_2.PNG "Swagger UI")
+
+![alt text](https://github.com/saividhya/TwitterApp/blob/master/screenshot/swagger_3.PNG "Swagger UI")
  
 **API details**
 
