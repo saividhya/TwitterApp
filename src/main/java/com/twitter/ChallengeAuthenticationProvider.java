@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import com.twitter.dao.SQLQueries;
 import com.twitter.entity.User;
 
 @Component
@@ -38,7 +39,7 @@ public class ChallengeAuthenticationProvider implements AuthenticationProvider{
 	}
 
 	private User authenticateUser(String name, String password) throws AuthenticationException {
-		String sql = "select p.id,handle,name from people p where p.username = :name  and p.password = :password"; 
+		String sql = SQLQueries.AUTHENTICATION; 
         SqlParameterSource namedParameter = new MapSqlParameterSource("name", name).addValue("password", password);
         User user = null;
         try{
