@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.twitter.dao.UserDao;
+import com.twitter.dto.DTOUtility;
+import com.twitter.dto.UserDTO;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
 import com.twitter.exception.UnFollowException;
@@ -18,31 +20,36 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User getUserByHandle(String handle) throws UserNotFoundException {
-		return userDao.getUserByHandle(handle);
+		User user = userDao.getUserByHandle(handle);
+		return user;
 	}
 
 	@Override
-	public List<User> getUsers() throws UserNotFoundException {
-		return userDao.getUsers();
+	public List<UserDTO> getUsers() throws UserNotFoundException {
+		List<UserDTO> usersDTO =  DTOUtility.mapAll(userDao.getUsers(), UserDTO.class);
+		return usersDTO;
 	}
 
 	@Override
 	public User getUserById(String id) throws UserNotFoundException {
-		return userDao.getUserById(id);
+		User user = userDao.getUserById(id);
+		return user;
 	}
 
 	@Override
 	public User getUserByName(String name) throws UserNotFoundException {
-		return userDao.getUserByName(name);
+		User user = userDao.getUserByName(name);
+		return user;
 	}
 	
 	@Override
 	public User getUserByUsername(String name) throws UserNotFoundException {
-		return userDao.getUserByUsername(name);
+		User user = userDao.getUserByUsername(name);
+		return user;
 	}
 	
 	@Override
-	public User getUser(String id) throws UserNotFoundException {
+	public UserDTO getUser(String id) throws UserNotFoundException {
 		 User user =null;
 		 try{
 			 int userId = Integer.parseInt(id);
@@ -66,7 +73,9 @@ public class UserServiceImpl implements UserService{
 		 }
 		 if(user==null)
 			throw new UserNotFoundException("User not found");
-		return user;
+		 
+		UserDTO userDto = DTOUtility.map(user, UserDTO.class); 
+		return userDto;
 	}
 	
 	@Override

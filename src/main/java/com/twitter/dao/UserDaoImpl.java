@@ -153,9 +153,9 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public List<PopularUsersDTO> getPopularUsers() throws UserNotFoundException {
+	public List<PopularUsersDAO> getPopularUsers() throws UserNotFoundException {
 		SqlParameterSource namedParameter = new MapSqlParameterSource( );
-		List<PopularUsersDTO> popualarUsers = null;
+		List<PopularUsersDAO> popualarUsers = null;
 		try{
 			popualarUsers =  namedParameterJdbcTemplate.query(SQLQueries.POPULAR_USERS, namedParameter, new PopularUserMapper());
 		}catch(EmptyResultDataAccessException e){
@@ -189,9 +189,9 @@ public class UserDaoImpl implements UserDao{
 		}
 	}
 	
-	private static final class PopularUserMapper implements RowMapper<PopularUsersDTO>{
-		public PopularUsersDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			PopularUsersDTO popularUsers = new PopularUsersDTO();
+	private static final class PopularUserMapper implements RowMapper<PopularUsersDAO>{
+		public PopularUsersDAO mapRow(ResultSet rs, int rowNum) throws SQLException {
+			PopularUsersDAO popularUsers = new PopularUsersDAO();
 			
 			User user = new User();
 			user.setId(rs.getInt("user_id"));

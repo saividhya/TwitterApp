@@ -2,21 +2,19 @@ package com.twitter.dto;
 
 import java.util.List;
 
-import com.twitter.entity.Message;
-
 public class MessagesDTO {
-	List<Message> myFeeds;
-	List<Message> followingFeeds;
-	public List<Message> getMyFeeds() {
+	List<MessageDTO> myFeeds;
+	List<MessageDTO> followingFeeds;
+	public List<MessageDTO> getMyFeeds() {
 		return myFeeds;
 	}
-	public void setMyFeeds(List<Message> myFeeds) {
+	public void setMyFeeds(List<MessageDTO> myFeeds) {
 		this.myFeeds = myFeeds;
 	}
-	public List<Message> getFollowingFeeds() {
+	public List<MessageDTO> getFollowingFeeds() {
 		return followingFeeds;
 	}
-	public void setFollowingFeeds(List<Message> followingFeeds) {
+	public void setFollowingFeeds(List<MessageDTO> followingFeeds) {
 		this.followingFeeds = followingFeeds;
 	}
 	

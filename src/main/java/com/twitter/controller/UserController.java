@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.twitter.dto.UserDTO;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
 import com.twitter.exception.UnFollowException;
@@ -27,14 +28,14 @@ public class UserController {
 	 
 	@RequestMapping(method=RequestMethod.GET, value = "/users")
 	public ResponseEntity<?> getUsers() throws UserNotFoundException{	
-			List<User> users = userService.getUsers();
-			return new ResponseEntity<List<User>>(users,HttpStatus.OK); 
+			List<UserDTO> users = userService.getUsers();
+			return new ResponseEntity<List<UserDTO>>(users,HttpStatus.OK); 
    } 
 	
 	@RequestMapping(method=RequestMethod.GET, value="/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable String id) throws UserNotFoundException {
-        User user = userService.getUser(id);
-        return new ResponseEntity<User>(user,HttpStatus.OK); 
+        UserDTO user = userService.getUser(id);
+        return new ResponseEntity<UserDTO>(user,HttpStatus.OK); 
     }
 	
 	@RequestMapping(method=RequestMethod.POST, value="/users/{id}/follow")

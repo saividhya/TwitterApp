@@ -1,21 +1,19 @@
 package com.twitter.dto;
 
-import com.twitter.entity.User;
-
 public class HopsDTO {
-	User currentUser;
-	User targetUser;
+	UserDTO currentUser;
+	UserDTO targetUser;
 	int noOfHops;
-	public User getCurrentUser() {
+	public UserDTO getCurrentUser() {
 		return currentUser;
 	}
-	public void setCurrentUser(User currentUser) {
+	public void setCurrentUser(UserDTO currentUser) {
 		this.currentUser = currentUser;
 	}
-	public User getTargetUser() {
+	public UserDTO getTargetUser() {
 		return targetUser;
 	}
-	public void setTargetUser(User targetUser) {
+	public void setTargetUser(UserDTO targetUser) {
 		this.targetUser = targetUser;
 	}
 	public int getNoOfHops() {

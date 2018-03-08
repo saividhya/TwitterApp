@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.twitter.ChallengeApplication;
+import com.twitter.dao.PopularUsersDAO;
 import com.twitter.dao.UserDao;
 import com.twitter.dto.PopularUsersDTO;
 import com.twitter.entity.User;
@@ -309,7 +310,7 @@ public class UserDaoTest {
 	@Test
 	public void testGetPopularUsers(){
 		try {
-			List<PopularUsersDTO> actualResult = userDao.getPopularUsers();
+			List<PopularUsersDAO> actualResult = userDao.getPopularUsers();
 			List<PopularUsersDTO> expectedResult = ExpectedResultBuilder.getPopularUsers();
 			
 			assertEquals(expectedResult.size(),actualResult.size());

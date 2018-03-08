@@ -1,8 +1,6 @@
 package com.twitter.dao;
 
 import java.util.List;
-
-import com.twitter.dto.PopularUsersDTO;
 import com.twitter.entity.User;
 import com.twitter.exception.FollowException;
 import com.twitter.exception.UnFollowException;
@@ -17,7 +15,7 @@ public interface UserDao {
 	User getUserByHandle(String handle) throws UserNotFoundException;
 	List<User> getFollowers(User user) throws FollowException;
 	List<User> getFollowing(User user) throws FollowException;
-	List<PopularUsersDTO> getPopularUsers()  throws UserNotFoundException;
+	List<PopularUsersDAO> getPopularUsers()  throws UserNotFoundException;
 	boolean checkFollowing(User currentUser, User targetUser);
 	void addFollowing(User currentUser, User targetUser) throws FollowException;
 	void deleteFollowing(User currentUser, User targetUser) throws UnFollowException;

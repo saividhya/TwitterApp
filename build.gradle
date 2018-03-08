@@ -27,6 +27,7 @@ repositories {
 
 
 dependencies {
+	compile('org.modelmapper:modelmapper:1.1.0')
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')

@@ -1,19 +1,20 @@
-package com.twitter.dto;
+package com.twitter.dao;
+import com.twitter.entity.User;
 
-public class PopularUsersDTO {
-	UserDTO user;
-	UserDTO popularUser;
+public class PopularUsersDAO {
+	User user;
+	User popularUser;
 	int followersCount;
-	public UserDTO getUser() {
+	public User getUser() {
 		return user;
 	}
-	public void setUser(UserDTO user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
-	public UserDTO getPopularUser() {
+	public User getPopularUser() {
 		return popularUser;
 	}
-	public void setPopularUser(UserDTO popularUser) {
+	public void setPopularUser(User popularUser) {
 		this.popularUser = popularUser;
 	}
 	public int getFollowersCount() {

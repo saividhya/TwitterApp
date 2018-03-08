@@ -2,22 +2,20 @@ package com.twitter.dto;
 
 import java.util.List;
 
-import com.twitter.entity.User;
-
 
 public class FriendsDTO {
-	List<User> followers;
-	List<User> following;
-	public List<User> getFollowers() {
+	List<UserDTO> followers;
+	List<UserDTO> following;
+	public List<UserDTO> getFollowers() {
 		return followers;
 	}
-	public void setFollowers(List<User> followers) {
+	public void setFollowers(List<UserDTO> followers) {
 		this.followers = followers;
 	}
-	public List<User> getFollowing() {
+	public List<UserDTO> getFollowing() {
 		return following;
 	}
-	public void setFollowing(List<User> following) {
+	public void setFollowing(List<UserDTO> following) {
 		this.following = following;
 	}
 	
